@@ -1,0 +1,3109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="author" content="Jingyu Bao" />
+
+
+
+<title>COVID-19 Dashboard</title>
+
+<meta property="og:title" content="COVID-19 Dashboard" />
+
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+
+<link rel="icon" href="data:image/x-icon;" type="image/x-icon">
+
+
+<script type="text/javascript">
+window.FlexDashboardComponents = [];
+</script>
+
+<script id="flexdashboard-navbar" type="application/json">
+[{"title":"Source Code","icon":"fa-code","href":"source_embed","align":"right"}]
+</script>
+<script src="01-flexdashboard_files/jquery-1.12.4/jquery.min.js"></script>
+<link href="01-flexdashboard_files/bootstrap-3.3.7/bootstrap.min.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/bootstrap-3.3.7/bootstrap.min.js"></script>
+<script src="01-flexdashboard_files/stickytableheaders-0.1.19/jquery.stickytableheaders.min.js"></script>
+<link href="01-flexdashboard_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="01-flexdashboard_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="01-flexdashboard_files/featherlight-1.3.5/featherlight.min.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/featherlight-1.3.5/featherlight.min.js"></script>
+<link href="01-flexdashboard_files/prism-1.4.1/prism.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/prism-1.4.1/prism.js"></script>
+<link href="01-flexdashboard_files/selectize-0.11.2/css/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/selectize-0.11.2/js/selectize.min.js"></script>
+<link href="01-flexdashboard_files/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<script src="01-flexdashboard_files/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="01-flexdashboard_files/summarywidget-binding-0.0.0.9000/summarywidget.js"></script>
+<link href="01-flexdashboard_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/datatables-binding-0.12/datatables.js"></script>
+<link href="01-flexdashboard_files/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="01-flexdashboard_files/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="01-flexdashboard_files/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/leaflet-1.3.1/leaflet.js"></script>
+<link href="01-flexdashboard_files/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="01-flexdashboard_files/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="01-flexdashboard_files/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/leaflet-binding-2.0.3/leaflet.js"></script>
+<link href="01-flexdashboard_files/leaflet-easybutton-1.3.1/easy-button.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/leaflet-easybutton-1.3.1/easy-button.js"></script>
+<script src="01-flexdashboard_files/leaflet-easybutton-1.3.1/EasyButton-binding.js"></script>
+<link href="01-flexdashboard_files/leaflet-locationfilter2-0.1.1/locationfilter.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/leaflet-locationfilter2-0.1.1/locationfilter.js"></script>
+<script src="01-flexdashboard_files/leaflet-locationfilter2-0.1.1/locationfilter-bindings.js"></script>
+<link href="01-flexdashboard_files/ionicons-2.0.1/ionicons.min.css" rel="stylesheet" />
+<link href="01-flexdashboard_files/leaflet-awesomemarkers-2.0.3/leaflet.awesome-markers.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/leaflet-awesomemarkers-2.0.3/leaflet.awesome-markers.min.js"></script>
+<link href="01-flexdashboard_files/lfx-fullscreen-1.0.2/lfx-fullscreen-prod.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/lfx-fullscreen-1.0.2/lfx-fullscreen-prod.js"></script>
+<link href="01-flexdashboard_files/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="01-flexdashboard_files/HomeButton-0.0.1/home-button.js"></script>
+<script src="01-flexdashboard_files/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<style type="text/css">
+
+/*
+ Dashboard CSS from Keen IO Dashboards
+ (https://github.com/keen/dashboards)
+*/
+
+body {
+  background: #f2f2f2;
+  padding: 60px 0 0 8px; /* padding-top overridden by theme */
+}
+
+body hr {
+  border-color: #d7d7d7;
+  margin: 10px 0;
+}
+
+.navbar-inverse .navbar-nav > li > a,
+.navbar .navbar-brand {
+  text-decoration: none;
+}
+
+.navbar-logo {
+  margin-top: 1px;
+}
+
+.navbar-logo img {
+  margin-right: 12px;
+}
+
+.navbar-author {
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+.navbar .dropdown-menu .fa {
+  min-width: 20px;
+}
+
+.navbar .dropdown-menu {
+  min-width: 150px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.chart-wrapper,
+.nav-tabs-custom,
+.sbframe-commentary
+{
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.chart-title {
+  border-bottom: 1px solid #d7d7d7;
+  color: #666;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 7px 10px 4px;
+}
+
+.chart-wrapper .chart-title:empty {
+  display: none;
+}
+
+.chart-wrapper .chart-stage {
+  overflow: hidden;
+  padding: 5px 10px;
+  position: relative;
+}
+
+.chart-wrapper .chart-notes {
+  background: #fbfbfb;
+  border-top: 1px solid #e2e2e2;
+  color: #808080;
+  font-size: 12px;
+  padding: 8px 10px 5px;
+}
+
+/*
+ CSS for handling flexbox layout
+*/
+
+#dashboard-container {
+  visibility: hidden;
+}
+
+.tab-content>.dashboard-page-wrapper.active {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.dashboard-page-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.dashboard-row-orientation {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.dashboard-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.dashboard-row-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.dashboard-column-orientation {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.dashboard-column {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.chart-wrapper-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.chart-stage-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  position: relative;
+}
+
+.chart-shim {
+  position: absolute;
+  left: 8px; top: 8px; right: 8px; bottom: 8px;
+}
+
+.no-padding .chart-shim {
+  left: 0; top: 0; right: 0; bottom: 0;
+}
+
+.flowing-content-shim {
+  overflow: auto;
+  left: 0; top: 0; right: 0; bottom: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.flowing-content-container {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.chart-stage .table-bordered {
+  border: none;
+}
+
+.chart-stage .table-bordered > tbody > tr > th,
+.chart-stage .table-bordered > tfoot > tr > th,
+.chart-stage .table-bordered > tbody > tr > td,
+.chart-stage .table-bordered > tfoot > tr > td {
+  border: none;
+}
+
+.chart-stage .table-bordered > tbody > tr > td {
+  border-top: 1px solid #dddddd;
+}
+
+.chart-stage .table-bordered > thead > tr > th {
+  border: none;
+  border-bottom: 2px solid #dddddd;
+}
+
+.bootstrap-table table>thead {
+  background-color: #fff;
+}
+
+.bootstrap-table table.data,
+.bootstrap-table table.shiny-table {
+  width: inherit !important;
+}
+
+.bootstrap-table table.data>tbody>tr>th,
+.bootstrap-table table.shiny-table>tbody>tr>th {
+  border-top: none;
+  border-bottom: 2px solid #dddddd;
+  padding: 5px;
+}
+
+.bootstrap-table .data td[align=right] {
+  font-family: inherit;
+}
+
+.chart-wrapper form {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.shiny-input-container label {
+  font-weight: normal;
+}
+
+.chart-stage .html-widget {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-stage .html-widget-static-bound {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-stage .shiny-bound-output {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Omit display of empty paragraphs */
+
+.chart-shim>p:empty {
+  display: none;
+}
+
+.chart-stage>p:empty {
+  display: none;
+}
+
+/* Omit display of special knitr options div*/
+
+.chart-stage .knitr-options {
+  display: none;
+}
+
+/* Automatically resizing images */
+
+.image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+
+.image-container img {
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* Value box */
+
+.value-box {
+  border-radius: 2px;
+  position: relative;
+  display: block;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.value-box > .inner {
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.value-box .value {
+  font-size: 38px;
+  font-weight: bold;
+  margin: 0 0 3px 0;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.value-box .caption {
+  font-size: 15px;
+}
+.value-box .caption > small {
+  display: block;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.value-box .icon i {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 80px;
+  color: rgba(0, 0, 0, 0.15);
+}
+
+.linked-value:hover {
+  cursor: pointer;
+}
+
+.value-box.linked-value:hover {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* STORYBOARD */
+
+.storyboard-nav button {
+  background: transparent;
+  border: 0;
+  opacity: .3;
+  outline: none;
+  padding: 0;
+}
+
+.storyboard-nav button:hover,
+.storyboard-nav button:hover {
+  opacity: .5;
+}
+
+.storyboard-nav button:disabled,
+.storyboard-nav button:disabled {
+  opacity: .1;
+}
+
+.storyboard-nav .sbnext,
+.storyboard-nav .sbprev {
+  float: left;
+  width: 2%;
+  height: 120px;
+  font-size: 50px;
+}
+
+.storyboard-nav .sbprev {
+  text-align: left;
+  width: 2%;
+}
+
+.storyboard-nav .sbnext {
+  float: right;
+  text-align: right;
+  margin-right: 8px;
+}
+
+.storyboard-nav .sbframelist {
+  margin: 0 auto;
+  width: 94%;
+  height: 120px;
+  overflow: hidden;
+  text-shadow: none;
+  margin-bottom: 8px;
+}
+
+.storyboard-nav .sbframelist ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.storyboard-nav .sbframelist ul li {
+  float: left;
+  width: 270px;
+  height: 100%;
+  padding: 10px 10px 10px 10px;
+  margin-right: 8px;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  color: #3a3c47;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.storyboard-nav .sbframelist ul li:last-child {
+  margin-right: 0px;
+}
+
+.storyboard-nav .sbframelist ul li.active {
+  color: #fff;
+  background: #B8B8B8;
+}
+
+.sbframe-commentary {
+  width: 300px;
+  background: #fbfbfb;
+  font-size: 14px;
+}
+
+.sbframe-commentary ul {
+  padding-left: 22px;
+}
+
+.sbframe.active {
+  display: flex;
+}
+
+.sbframe:not(.active) {
+  display: none;
+}
+
+/* NAV TABS */
+
+.nav-tabs-custom > .nav-tabs {
+  margin: 0;
+  border-bottom: 1px solid #d7d7d7;
+  color: #666;
+  font-size: 14px;
+  font-weight: 300;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.nav-tabs-custom > .nav-tabs > li {
+  border-top: 3px solid transparent;
+  margin-bottom: -1px;
+  margin-right: 5px;
+}
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:active {
+  color: #666;
+  font-weight: 300;
+  font-size: 14px;
+  border-radius: 0;
+  padding: 3px 10px 5px;
+  text-transform: none;
+}
+
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a {
+  border-bottom-color: transparent;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a.text-muted {
+  color: #999;
+}
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:hover {
+  background: transparent;
+  margin: 0;
+}
+.nav-tabs-custom > .nav-tabs > li > a:hover {
+  color: #999;
+}
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:hover,
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:focus,
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:active {
+  border-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: #3c8dbc;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a,
+.nav-tabs-custom > .nav-tabs > li.active:hover > a {
+  background-color: #fff;
+  color: #666;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a {
+  border-top-color: transparent;
+  border-left-color: #d7d7d7;
+  border-right-color: #d7d7d7;
+}
+.nav-tabs-custom > .nav-tabs > li:first-of-type {
+  margin-left: 0;
+}
+.nav-tabs-custom > .nav-tabs > li:first-of-type.active > a {
+  border-left-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs.pull-right {
+  float: none !important;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li {
+  float: right;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type {
+  margin-right: 0;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type > a {
+  border-left-width: 1px;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type.active > a {
+  border-left-color: #d7d7d7;
+  border-right-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs > li.header {
+  line-height: 35px;
+  padding: 0 10px;
+  font-size: 20px;
+  color: #666;
+}
+.nav-tabs-custom > .nav-tabs > li.header > .fa,
+.nav-tabs-custom > .nav-tabs > li.header > .glyphicon,
+.nav-tabs-custom > .nav-tabs > li.header > .ion {
+  margin-right: 5px;
+}
+.nav-tabs-custom > .tab-content {
+  background: #fff;
+  padding: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav-tabs-custom > .tab-content > .chart-wrapper {
+  background: #fff;
+  border: none;
+  margin: 0;
+}
+
+
+.nav-tabs-custom > .tab-content > .active {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav-tabs-custom .dropdown.open > a:active,
+.nav-tabs-custom .dropdown.open > a:focus {
+  background: transparent;
+  color: #999;
+}
+
+
+@media (max-width: 767px) {
+  .value-box {
+    text-align: center;
+    margin-right: 8px;
+  }
+  .value-box .icon {
+    display: none;
+  }
+}
+
+/* Fixed position sidebar */
+
+.section.sidebar {
+  position: fixed;
+  top: 51px; /* overridden by theme */
+  left: 0;
+  bottom: 0;
+  border-right: 1px solid #e2e2e2;
+  background-color: white; /* overridden by theme */
+  padding-left: 10px;
+  padding-right: 10px;
+  visibility: hidden;
+  overflow: auto;
+}
+
+.section.sidebar form p:first-child {
+  margin-top: 10px;
+}
+
+/* Embedded source code */
+
+#flexdashboard-source-code {
+  display: none;
+}
+
+.featherlight-content #flexdashboard-source-code {
+  display: inline-block;
+}
+
+.featherlight-content {
+  width: 80%;
+  max-width: 800px;
+  padding: 0 !important;
+  border-bottom: none !important;
+}
+
+.featherlight:last-of-type {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.featherlight-inner {
+  width: 100%;
+}
+
+.featherlight-content pre {
+  margin: 0;
+  border: 0;
+  background: #fff;
+  font-size: 12px;
+}
+
+.unselectable {
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+#flexdashboard-source-code code {
+  -ms-user-select: text;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+}
+
+/* DataTables Tweaks */
+
+.dataTables_filter input[type="search"] {
+  -webkit-appearance: searchfield;
+  outline: none;
+}
+
+.dataTables_wrapper.no-footer
+.dataTables_info {
+  padding-top: 0;
+}
+
+
+table.dataTable thead th {
+  border-bottom: 1px solid #d7d7d7;
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+  border-bottom: 1px solid #d7d7d7;
+}
+
+/* Mobile phone only CSS */
+
+.desktop-layout div.section.mobile {
+  display: none;
+}
+
+.mobile-layout div.section.no-mobile {
+  display: none;
+}
+
+.mobile-figure {
+  display: none;
+}
+
+
+
+body {
+  padding-top: 73px;
+}
+
+.section.sidebar {
+  top: 64px;
+  background-color: rgba(33, 150, 243, 0.15);
+}
+
+.value-box {
+  color: inherit;
+}
+
+.bg-primary {
+  background-color: rgba(33, 150, 243, 0.35);
+}
+
+.storyboard-nav .sbframelist ul li.active {
+  background-color: rgba(33, 150, 243, 0.7);
+}
+
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: transparent;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a:hover,
+.nav-tabs-custom > .nav-tabs > li > a:focus:hover {
+  background-color: transparent;
+  -webkit-box-shadow: inset 0 -2px 0 rgba(33, 150, 243, 0.7);
+  box-shadow: inset 0 -2px 0 rgba(33, 150, 243, 0.7);
+  color: rgba(33, 150, 243, 0.7);
+}
+.nav-tabs-custom > .nav-tabs > li.active > a,
+.nav-tabs-custom > .nav-tabs > li.active > a:focus {
+  border: none;
+  -webkit-box-shadow: inset 0 -2px 0 rgba(33, 150, 243, 0.7);
+  box-shadow: inset 0 -2px 0 rgba(33, 150, 243, 0.7);
+  /*color: rgba(33, 150, 243, 0.7);*/
+}
+.nav-tabs-custom > .nav-tabs > li.active > a:hover,
+.nav-tabs-custom > .nav-tabs > li.active > a:focus:hover {
+  border: none;
+  /*color: rgba(33, 150, 243, 0.7);*/
+}
+
+@media only screen and (min-width: 768px) {
+html, body {
+  height: 100%;
+}
+
+#dashboard-container {
+  height: 100%;
+}
+}
+</style>
+
+
+
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="container-fluid">
+<div class="navbar-header">
+
+<button id="navbar-button" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+
+<span class="navbar-logo pull-left">
+  
+</span>
+<span class="navbar-brand">
+  COVID-19 Dashboard
+  <span class="navbar-author">
+    Jingyu Bao
+    </span>
+</span>
+
+</div>
+<div id="navbar" class="navbar-collapse collapse">
+<ul class="nav navbar-nav navbar-left">
+</ul>
+<ul class="nav navbar-nav navbar-right">
+</ul>
+</div><!--/.nav-collapse-->
+</div><!--/.container-->
+</div><!--/.navbar-->
+
+<script type="text/javascript">
+
+
+var FlexDashboard = (function () {
+
+  // initialize options
+  var _options = {};
+
+  var FlexDashboard = function() {
+
+    // default options
+    _options = $.extend(_options, {
+      theme: "cosmo",
+      fillPage: false,
+      orientation: 'columns',
+      storyboard: false,
+      defaultFigWidth: 576,
+      defaultFigHeight: 461,
+      defaultFigWidthMobile: 360,
+      defaultFigHeightMobile: 461,
+      isMobile: false,
+      isPortrait: false
+    });
+  };
+
+  function init(options) {
+
+    // extend default options
+    $.extend(true, _options, options);
+
+    // add ids to sections that don't have them (pandoc won't assign ids
+    // to e.g. sections with titles consisting of only chinese characters)
+    var nextId = 1;
+    $('.level1:not([id]),.level2:not([id]),.level3:not([id])').each(function() {
+      $(this).attr('id', 'dashboard-' + nextId++);
+    });
+
+    // find navbar items
+    var navbarItems = $('#flexdashboard-navbar');
+    if (navbarItems.length)
+      navbarItems = JSON.parse(navbarItems.html());
+    addNavbarItems(navbarItems);
+
+    // find the main dashboard container
+    var dashboardContainer = $('#dashboard-container');
+
+    // resolve mobile classes
+    resolveMobileClasses(dashboardContainer);
+
+    // one time global initialization for components
+    componentsInit(dashboardContainer);
+
+    // look for a global sidebar
+    var globalSidebar = dashboardContainer.find(".section.level1.sidebar");
+    if (globalSidebar.length > 0) {
+
+      // global layout for fullscreen displays
+      if (!isMobilePhone()) {
+
+         // hoist it up to the top level
+         globalSidebar.insertBefore(dashboardContainer);
+
+         // lay it out (set width/positions)
+         layoutSidebar(globalSidebar, dashboardContainer);
+
+      // tuck sidebar into first page for mobile phones
+      } else {
+
+        // convert it into a level3 section
+        globalSidebar.removeClass('sidebar');
+        globalSidebar.removeClass('level1');
+        globalSidebar.addClass('level3');
+        var h1 = globalSidebar.children('h1');
+        var h3 = $('<h3></h3>');
+        h3.html(h1.html());
+        h3.insertBefore(h1);
+        h1.remove();
+
+        // move it into the first page
+        var page = dashboardContainer.find('.section.level1').first();
+        if (page.length > 0)
+          page.prepend(globalSidebar);
+      }
+    }
+
+    // look for pages to layout
+    var pages = $('div.section.level1');
+    if (pages.length > 0) {
+
+        // find the navbar and collapse on clicked
+        var navbar = $('#navbar');
+        navbar.on("click", "a[data-toggle!=dropdown]", null, function () {
+           navbar.collapse('hide');
+        });
+
+        // envelop the dashboard container in a tab content div
+        dashboardContainer.wrapInner('<div class="tab-content"></div>');
+
+        pages.each(function(index) {
+
+          // lay it out
+          layoutDashboardPage($(this));
+
+          // add it to the navbar
+          addToNavbar($(this), index === 0);
+
+        });
+
+    } else {
+
+      // remove the navbar and navbar button if we don't
+      // have any navbuttons
+      if (navbarItems.length === 0) {
+        $('#navbar').remove();
+        $('#navbar-button').remove();
+      }
+
+      // add the storyboard class if requested
+      if (_options.storyboard)
+        dashboardContainer.addClass('storyboard');
+
+      // layout the entire page
+      layoutDashboardPage(dashboardContainer);
+    }
+
+    // if we are in shiny we need to trigger a window resize event to
+    // force correct layout of shiny-bound-output elements
+    if (isShinyDoc())
+      $(window).trigger('resize');
+
+    // make main components visible
+    $('.section.sidebar').css('visibility', 'visible');
+    dashboardContainer.css('visibility', 'visible');
+
+    // handle location hash
+    handleLocationHash();
+
+    // intialize prism highlighting
+    initPrismHighlighting();
+
+    // record mobile and orientation state then register a handler
+    // to refresh if it changes
+    _options.isMobile = isMobilePhone();
+    _options.isPortrait = isPortrait();
+    $(window).on('resize', function() {
+      if (_options.isMobile !== isMobilePhone() ||
+          _options.isPortrait !== isPortrait()) {
+        window.location.reload();
+      }
+    });
+
+    // trigger layoutcomplete event
+    dashboardContainer.trigger('flexdashboard:layoutcomplete');
+  }
+
+  function resolveMobileClasses(dashboardContainer) {
+     // add top level layout class
+    dashboardContainer.addClass(isMobilePhone() ? 'mobile-layout' :
+                                                  'desktop-layout');
+
+    // look for .mobile sections and add .no-mobile to their peers
+    var mobileSections = $('.section.mobile');
+    mobileSections.each(function() {
+       var id = $(this).attr('id');
+       var nomobileId = id.replace(/-\d+$/, '');
+       $('#' + nomobileId).addClass('no-mobile');
+    });
+  }
+
+  function addNavbarItems(navbarItems) {
+
+    var navbarLeft = $('ul.navbar-left');
+    var navbarRight = $('ul.navbar-right');
+
+    for (var i = 0; i<navbarItems.length; i++) {
+
+      // get the item
+      var item = navbarItems[i];
+
+      // determine the container
+      var container = null;
+      if (item.align === "left")
+        container = navbarLeft;
+      else
+        container = navbarRight;
+
+      // navbar menu if we have multiple items
+      if (item.items) {
+        var menu = navbarMenu(null, item.icon, item.title, container);
+        for (var j = 0; j<item.items.length; j++) {
+          var subItem = item.items[j];
+          var li = $('<li></li>');
+          li.append(navbarLink(subItem.icon, subItem.title, subItem.href, subItem.target));
+          menu.append(li);
+        }
+      } else {
+        var li = $('<li></li>');
+        li.append(navbarLink(item.icon, item.title, item.href, item.target));
+        container.append(li);
+      }
+    }
+  }
+
+  // create or get a reference to an existing dropdown menu
+  function navbarMenu(id, icon, title, container) {
+    var existingMenu = [];
+    if (id)
+      existingMenu = container.children('#' + id);
+    if (existingMenu.length > 0) {
+      return existingMenu.children('ul');
+    } else {
+      var li = $('<li></li>');
+      if (id)
+        li.attr('id', id);
+      li.addClass('dropdown');
+      // auto add "Share" title on mobile if necessary
+      if (!title && icon && (icon === "fa-share-alt") && isMobilePhone())
+        title = "Share";
+      if (title) {
+        title = title + ' <span class="caret"></span>';
+      }
+      var a = navbarLink(icon, title, "#");
+      a.addClass('dropdown-toggle');
+      a.attr('data-toggle', 'dropdown');
+      a.attr('role', 'button');
+      a.attr('aria-expanded', 'false');
+      li.append(a);
+      var ul = $('<ul class="dropdown-menu"></ul>');
+      ul.attr('role', 'menu');
+      li.append(ul);
+      container.append(li);
+      return ul;
+    }
+  }
+
+  function addToNavbar(page, active) {
+
+    // capture the id and data-icon attribute (if any)
+    var id = page.attr('id');
+    var icon = page.attr('data-icon');
+    var navmenu = page.attr('data-navmenu');
+
+    // get hidden state (transfer this to navbar)
+    var hidden = page.hasClass('hidden');
+    page.removeClass('hidden');
+
+    // sanitize the id for use with bootstrap tabs
+    id = id.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_');
+    page.attr('id', id);
+
+    // get the wrapper
+    var wrapper = page.closest('.dashboard-page-wrapper');
+
+    // move the id to the wrapper
+    page.removeAttr('id');
+    wrapper.attr('id', id);
+
+    // add the tab-pane class to the wrapper
+    wrapper.addClass('tab-pane');
+    if (active)
+      wrapper.addClass('active');
+
+    // get a reference to the h1, discover it's id and title, then remove it
+    var h1 = wrapper.find('h1').first();
+    var title = h1.html();
+    h1.remove();
+
+    // create a navbar item
+    var li = $('<li></li>');
+    var a = navbarLink(icon, title, '#' + id);
+    a.attr('data-toggle', 'tab');
+    li.append(a);
+
+    // add it to the navbar (or navbar menu if specified)
+    var container = $('ul.navbar-left');
+    if (navmenu) {
+      var menuId = navmenu.replace(/\s+/g, '');
+      var menu = navbarMenu(menuId, null, navmenu, container);
+      menu.append(li);
+    } else {
+      container.append(li);
+    }
+
+    // hide it if requested
+    if (hidden)
+      li.addClass('hidden');
+  }
+
+  function navbarLink(icon, title, href, target) {
+
+    var a = $('<a></a>');
+    if (icon) {
+
+      // get the name of the icon set and icon
+      var dashPos = icon.indexOf("-");
+      var iconSet = icon.substring(0, dashPos);
+      var iconName = icon.substring(dashPos + 1);
+
+      // create the icon
+      var iconElement = $('<span class="' + iconSet + ' ' + icon + '"></span>');
+      if (title)
+        iconElement.css('margin-right', '7px');
+      a.append(iconElement);
+      // if href is null see if we can auto-generate based on icon (e.g. social)
+      if (!href)
+        maybeGenerateLinkFromIcon(iconName, a);
+    }
+    if (title)
+      a.append(title);
+
+    // add the href.
+    if (href) {
+      if (href === "source_embed") {
+        a.attr('href', '#');
+        a.attr('data-featherlight', "#flexdashboard-source-code");
+        a.featherlight({
+            beforeOpen: function(event){
+              $('body').addClass('unselectable');
+            },
+            afterClose: function(event){
+              $('body').removeClass('unselectable');
+            }
+        });
+      } else {
+        a.attr('href', href);
+      }
+    }
+
+    // add the arget
+    if (target)
+      a.attr('target', target);
+
+    return a;
+  }
+
+  // auto generate a link from an icon name (e.g. twitter) when possible
+  function maybeGenerateLinkFromIcon(iconName, a) {
+
+     var serviceLinks = {
+      "twitter": "https://twitter.com/share?text=" + encodeURIComponent(document.title) + "&url="+encodeURIComponent(location.href),
+      "facebook": "https://www.facebook.com/sharer/sharer.php?s=100&p[url]="+encodeURIComponent(location.href),
+      "google-plus": "https://plus.google.com/share?url="+encodeURIComponent(location.href),
+      "linkedin": "https://www.linkedin.com/shareArticle?mini=true&url="+encodeURIComponent(location.href) + "&title=" + encodeURIComponent(document.title),
+      "pinterest": "https://pinterest.com/pin/create/link/?url="+encodeURIComponent(location.href) + "&description=" + encodeURIComponent(document.title)
+    };
+
+    var makeSocialLink = function(a, href) {
+      a.attr('href', '#');
+      a.on('click', function(e) {
+        e.preventDefault();
+        window.open(href);
+      });
+    };
+
+    $.each(serviceLinks, function(key, value) {
+      if (iconName.indexOf(key) !== -1)
+        makeSocialLink(a, value);
+    });
+  }
+
+  // layout a dashboard page
+  function layoutDashboardPage(page) {
+
+    // use a page wrapper so that free form content above the
+    // dashboard appears at the top rather than the side (as it
+    // would without the wrapper in a column orientation)
+    var wrapper = $('<div class="dashboard-page-wrapper"></div>');
+    page.wrap(wrapper);
+
+    // if there are no level2 or level3 headers synthesize a level3
+    // header to contain the (e.g. frame it, scroll container, etc.)
+    var headers = page.find('h2,h3');
+    if (headers.length === 0)
+      page.wrapInner('<div class="section level3"></div>');
+
+    // hoist up any content before level 2 or level 3 headers
+    var children = page.children();
+    children.each(function(index) {
+      if ($(this).hasClass('level2') || $(this).hasClass('level3'))
+        return false;
+      $(this).insertBefore(page);
+    });
+
+    // determine orientation and fillPage behavior for distinct media
+    var orientation, fillPage, storyboard;
+
+    // media: mobile phone
+    if (isMobilePhone()) {
+
+      // if there is a sidebar we need to ensure it's content
+      // is properly framed as an h3
+      var sidebar = page.find('.section.sidebar');
+      sidebar.removeClass('sidebar');
+      sidebar.wrapInner('<div class="section level3"></div>');
+      var h2 = sidebar.find('h2');
+      var h3 = $('<h3></h3>');
+      h3.html(h2.html());
+      h3.insertBefore(h2);
+      h2.remove();
+
+      // wipeout h2 elements then enclose them in a single h2
+      var level2 = page.find('div.section.level2');
+      level2.each(function() {
+        level2.children('h2').remove();
+        level2.children().unwrap();
+      });
+      page.wrapInner('<div class="section level2"></div>');
+
+      // substitute mobile images
+      if (isPortrait()) {
+        var mobileFigures = $('img.mobile-figure');
+        mobileFigures.each(function() {
+          // get the src (might be base64 encoded)
+          var src = $(this).attr('src');
+
+          // find it's peer
+          var id = $(this).attr('data-mobile-figure-id');
+          var img = $('img[data-figure-id=' + id + "]");
+          img.attr('src', src)
+             .attr('width', _options.defaultFigWidthMobile)
+             .attr('height', _options.defaultFigHeightMobile);
+        });
+      }
+
+      // hoist storyboard commentary into it's own section
+      if (page.hasClass('storyboard')) {
+        var commentaryHR = page.find('div.section.level3 hr');
+        commentaryHR.each(function() {
+          var commentary = $(this).nextAll().detach();
+          var commentarySection = $('<div class="section level3"></div>');
+          commentarySection.append(commentary);
+          commentarySection.insertAfter($(this).closest('div.section.level3'));
+          $(this).remove();
+        });
+      }
+
+      // force a non full screen layout by columns
+      orientation = _options.orientation = 'columns';
+      fillPage = _options.fillPage = false;
+      storyboard = _options.storyboard = false;
+
+    // media: desktop
+    } else {
+
+      // determine orientation
+      orientation = page.attr('data-orientation');
+      if (orientation !== 'rows' && orientation != 'columns')
+        orientation = _options.orientation;
+
+      // determine storyboard mode
+      storyboard = page.hasClass('storyboard');
+
+      // fillPage based on options (force for storyboard)
+      fillPage = _options.fillPage || storyboard;
+
+      // handle sidebar
+      var sidebar = page.find('.section.level2.sidebar');
+      if (sidebar.length > 0)
+        layoutSidebar(sidebar, page);
+    }
+
+    // give it and it's parent divs height: 100% if we are in fillPage mode
+    if (fillPage) {
+      page.addClass('vertical-layout-fill');
+      page.css('height', '100%');
+      page.parents('div').css('height', '100%');
+    } else {
+      page.addClass('vertical-layout-scroll');
+    }
+
+    // perform the layout
+    if (storyboard)
+      layoutPageAsStoryboard(page);
+    else if (orientation === 'rows')
+      layoutPageByRows(page, fillPage);
+    else if (orientation === 'columns')
+      layoutPageByColumns(page, fillPage);
+  }
+
+  function layoutSidebar(sidebar, content) {
+
+    // get it out of the header hierarchy
+    sidebar = sidebar.first();
+    if (sidebar.hasClass('level1')) {
+      sidebar.removeClass('level1');
+      sidebar.children('h1').remove();
+    } else if (sidebar.hasClass('level2')) {
+      sidebar.removeClass('level2');
+      sidebar.children('h2').remove();
+    }
+
+    // determine width
+    var sidebarWidth = isTablet() ? 220 : 250;
+    var dataWidth = parseInt(sidebar.attr('data-width'));
+    if (dataWidth)
+      sidebarWidth = dataWidth;
+
+    // set the width and shift the page right to accomodate the sidebar
+    sidebar.css('width', sidebarWidth + 'px');
+    content.css('padding-left', sidebarWidth + 'px');
+
+    // wrap it's contents in a form
+    sidebar.wrapInner($('<form></form>'));
+  }
+
+  function layoutPageAsStoryboard(page) {
+
+    // create storyboard navigation
+    var nav = $('<div class="storyboard-nav"></div>');
+
+    // add navigation buttons
+    var prev = $('<button class="sbprev"><i class="fa fa-angle-left"></i></button>');
+    nav.append(prev);
+    var next= $('<button class="sbnext"><i class="fa fa-angle-right"></i></button>');
+    nav.append(next);
+
+    // add navigation frame
+    var frameList = $('<div class="sbframelist"></div>');
+    nav.append(frameList);
+    var ul = $('<ul></ul>');
+    frameList.append(ul);
+
+     // find all the level3 sections (those are the storyboard frames)
+    var frames = page.find('div.section.level3');
+    frames.each(function() {
+
+      // mark it
+      $(this).addClass('sbframe');
+
+      // divide it into chart content and (optional) commentary
+      $(this).addClass('dashboard-column-orientation');
+
+      // stuff the chart into it's own div w/ flex
+      $(this).wrapInner('<div class="sbframe-component"></div>');
+      setFlex($(this), 1);
+      var frame = $(this).children('.sbframe-component');
+
+      // extract the title from the h3
+      var li = $('<li></li>');
+      var h3 = frame.children('h3');
+      li.html(h3.html());
+      h3.remove();
+      ul.append(li);
+
+      // extract commentary
+      var hr = frame.children('hr');
+      if (hr.length) {
+        var commentary = hr.nextAll().detach();
+        hr.remove();
+        var commentaryFrame = $('<div class="sbframe-commentary"></div>');
+        commentaryFrame.addClass('flowing-content-shim');
+        commentaryFrame.addClass('flowing-content-container');
+        commentaryFrame.append(commentary);
+        $(this).append(commentaryFrame);
+
+        // look for a data-commentary-width attribute
+        var commentaryWidth = $(this).attr('data-commentary-width');
+        if (commentaryWidth)
+          commentaryFrame.css('width', commentaryWidth + 'px');
+      }
+
+      // layout the chart (force flex)
+      var result = layoutChart(frame, true);
+
+      // ice the notes if there are none
+      if (!result.notes)
+        frame.find('.chart-notes').remove();
+
+      // set flex on chart
+      setFlex(frame, 1);
+    });
+
+    // create a div to hold all the frames
+    var frameContent = $('<div class="sbframe-content"></div>');
+    frameContent.addClass('dashboard-row-orientation');
+    frameContent.append(frames.detach());
+
+    // row orientation to stack nav and frame content
+    page.addClass('dashboard-row-orientation');
+    page.append(nav);
+    page.append(frameContent);
+    setFlex(frameContent, 1);
+
+    // initialize sly
+    var sly = new Sly(frameList, {
+    		horizontal: true,
+    		itemNav: 'basic',
+    		smart: true,
+    		activateOn: 'click',
+    		startAt: 0,
+    		scrollBy: 1,
+    		activatePageOn: 'click',
+    		speed: 200,
+    		moveBy: 600,
+    		dragHandle: true,
+    		dynamicHandle: true,
+    		clickBar: true,
+    		keyboardNavBy: 'items',
+    		next: next,
+    		prev: prev
+    	}).init();
+
+    // make first frame active
+    frames.removeClass('active');
+    frames.first().addClass('active');
+
+    // subscribe to frame changed events
+    sly.on('active', function (eventName, itemIndex) {
+      frames.removeClass('active');
+      frames.eq(itemIndex).addClass('active')
+                          .trigger('shown');
+    });
+  }
+
+  function layoutPageByRows(page, fillPage) {
+
+    // row orientation
+    page.addClass('dashboard-row-orientation');
+
+    // find all the level2 sections (those are the rows)
+    var rows = page.find('div.section.level2');
+
+    // if there are no level2 sections then treat the
+    // entire page as if it's a level 2 section
+    if (rows.length === 0) {
+      page.wrapInner('<div class="section level2"></div>');
+      rows = page.find('div.section.level2');
+    }
+
+    rows.each(function () {
+
+      // flags
+      var haveNotes = false;
+      var haveFlexHeight = true;
+
+      // remove the h2
+      $(this).children('h2').remove();
+
+      // check for a tabset
+      var isTabset = $(this).hasClass('tabset');
+      if (isTabset)
+        layoutTabset($(this));
+
+      // give it row layout semantics if it's not a tabset
+      if (!isTabset)
+        $(this).addClass('dashboard-row');
+
+      // find all of the level 3 subheads
+      var columns = $(this).find('div.section.level3');
+
+      // determine figureSizes sizes
+      var figureSizes = chartFigureSizes(columns);
+
+      // fixup the columns
+      columns.each(function(index) {
+
+        // layout the chart (force flex if we are in a tabset)
+        var result = layoutChart($(this), isTabset);
+
+        // update flexHeight state
+        if (!result.flex)
+          haveFlexHeight = false;
+
+        // update state
+        if (result.notes)
+          haveNotes = true;
+
+        // set the column flex based on the figure width
+        // (value boxes will just get the default figure width)
+        var chartWidth = figureSizes[index].width;
+        setFlex($(this), chartWidth + ' ' + chartWidth + ' 0px');
+
+      });
+
+      // remove empty chart note divs
+      if (isTabset)
+        $(this).find('.chart-notes').filter(function() {
+            return $(this).html() === "&nbsp;";
+        }).remove();
+      if (!haveNotes)
+        $(this).find('.chart-notes').remove();
+
+       // make it a flexbox row
+      if (haveFlexHeight)
+        $(this).addClass('dashboard-row-flex');
+
+      // now we can set the height on all the wrappers (based on maximum
+      // figure height + room for title and notes, or data-height on the
+      // container if specified). However, don't do this if there is
+      // no flex on any of the constituent columns
+      var flexHeight = null;
+      var dataHeight = parseInt($(this).attr('data-height'));
+      if (dataHeight)
+        flexHeight = adjustedHeight(dataHeight, columns.first());
+      else if (haveFlexHeight)
+        flexHeight = maxChartHeight(figureSizes, columns);
+      if (flexHeight) {
+        if (fillPage)
+          setFlex($(this), flexHeight + ' ' + flexHeight + ' 0px');
+        else {
+          $(this).css('height', flexHeight + 'px');
+          setFlex($(this), '0 0 ' + flexHeight + 'px');
+        }
+      }
+
+    });
+  }
+
+  function layoutPageByColumns(page, fillPage) {
+
+    // column orientation
+    page.addClass('dashboard-column-orientation');
+
+    // find all the level2 sections (those are the columns)
+    var columns = page.find('div.section.level2');
+
+    // if there are no level2 sections then treat the
+    // entire page as if it's a level 2 section
+    if (columns.length === 0) {
+      page.wrapInner('<div class="section level2"></div>');
+      columns = page.find('div.section.level2');
+    }
+
+    // layout each column
+    columns.each(function (index) {
+
+      // remove the h2
+      $(this).children('h2').remove();
+
+      // make it a flexbox column
+      $(this).addClass('dashboard-column');
+
+      // check for a tabset
+      var isTabset = $(this).hasClass('tabset');
+      if (isTabset)
+        layoutTabset($(this));
+
+      // find all the h3 elements
+      var rows = $(this).find('div.section.level3');
+
+      // get the figure sizes for the rows
+      var figureSizes = chartFigureSizes(rows);
+
+      // column flex is the max row width (or data-width if specified)
+      var flexWidth;
+      var dataWidth = parseInt($(this).attr('data-width'));
+      if (dataWidth)
+        flexWidth = dataWidth;
+      else
+        flexWidth = maxChartWidth(figureSizes);
+      setFlex($(this), flexWidth + ' ' + flexWidth + ' 0px');
+
+      // layout each chart
+      rows.each(function(index) {
+
+        // perform the layout
+        var result = layoutChart($(this), false);
+
+        // ice the notes if there are none
+        if (!result.notes)
+          $(this).find('.chart-notes').remove();
+
+        // set flex height based on figHeight, then adjust
+        if (result.flex) {
+          var chartHeight = figureSizes[index].height;
+          chartHeight = adjustedHeight(chartHeight, $(this));
+          if (fillPage)
+            setFlex($(this), chartHeight + ' ' + chartHeight + ' 0px');
+          else {
+            $(this).css('height', chartHeight + 'px');
+            setFlex($(this), chartHeight + ' ' + chartHeight + ' ' + chartHeight + 'px');
+          }
+        }
+      });
+    });
+  }
+
+  function chartFigureSizes(charts) {
+
+    // sizes
+    var figureSizes = new Array(charts.length);
+
+    // check each chart
+    charts.each(function(index) {
+
+      // start with default
+      figureSizes[index] = {
+        width: _options.defaultFigWidth,
+        height: _options.defaultFigHeight
+      };
+
+      // look for data-height or data-width then knit options
+      var dataWidth = parseInt($(this).attr('data-width'));
+      var dataHeight = parseInt($(this).attr('data-height'));
+      var knitrOptions = $(this).find('.knitr-options:first');
+      var knitrWidth, knitrHeight;
+      if (knitrOptions) {
+        knitrWidth = parseInt(knitrOptions.attr('data-fig-width'));
+        knitrHeight =  parseInt(knitrOptions.attr('data-fig-height'));
+      }
+
+      // width
+      if (dataWidth)
+        figureSizes[index].width = dataWidth;
+      else if (knitrWidth)
+        figureSizes[index].width = knitrWidth;
+
+      // height
+      if (dataHeight)
+        figureSizes[index].height = dataHeight;
+      else if (knitrHeight)
+        figureSizes[index].height = knitrHeight;
+    });
+
+    // return sizes
+    return figureSizes;
+  }
+
+  function maxChartHeight(figureSizes, charts) {
+
+    // first compute the maximum height
+    var maxHeight = _options.defaultFigHeight;
+    for (var i = 0; i<figureSizes.length; i++)
+      if (figureSizes[i].height > maxHeight)
+        maxHeight = figureSizes[i].height;
+
+    // now add offests for chart title and chart notes
+    if (charts.length)
+      maxHeight = adjustedHeight(maxHeight, charts.first());
+
+    return maxHeight;
+  }
+
+  function adjustedHeight(height, chart) {
+    if (chart.length > 0) {
+      var chartTitle = chart.find('.chart-title');
+      if (chartTitle.length)
+        height += chartTitle.first().outerHeight();
+      var chartNotes = chart.find('.chart-notes');
+      if (chartNotes.length)
+        height += chartNotes.first().outerHeight();
+    }
+    return height;
+  }
+
+  function maxChartWidth(figureSizes) {
+    var maxWidth = _options.defaultFigWidth;
+    for (var i = 0; i<figureSizes.length; i++)
+      if (figureSizes[i].width > maxWidth)
+        maxWidth = figureSizes[i].width;
+    return maxWidth;
+  }
+
+  // layout a chart
+  function layoutChart(chart, forceFlex) {
+
+    // state to return
+    var result = {
+      notes: false,
+      flex: false
+    };
+
+    // extract the title
+    var title = extractTitle(chart);
+
+    // find components that apply to this container
+    var components = componentsFind(chart);
+
+    // if it's a custom component then call it and return
+    var customComponents = componentsCustom(components);
+    if (customComponents.length) {
+      componentsLayout(customComponents, title, chart);
+      result.notes = false;
+      result.flex = forceFlex || componentsFlex(customComponents);
+      return result;
+    }
+
+    // put all the content in a chart wrapper div
+    chart.addClass('chart-wrapper');
+    chart.wrapInner('<div class="chart-stage"></div>');
+    var chartContent = chart.children('.chart-stage');
+
+    // flex the content if appropriate
+    result.flex = forceFlex || componentsFlex(components);
+    if (result.flex) {
+      // add flex classes
+      chart.addClass('chart-wrapper-flex');
+      chartContent.addClass('chart-stage-flex');
+
+      // additional shim to break out of flexbox sizing
+      chartContent.wrapInner('<div class="chart-shim"></div>');
+      chartContent = chartContent.children('.chart-shim');
+    }
+
+    // set custom data-padding attribute
+    var pad = chart.attr('data-padding');
+    if (pad) {
+      if (pad === "0")
+        chart.addClass('no-padding');
+      else {
+        pad = pad + 'px';
+        chartContent.css('left', pad)
+                    .css('top', pad)
+                    .css('right', pad)
+                    .css('bottom', pad)
+      }
+    }
+
+    // call compoents
+    componentsLayout(components, title, chartContent);
+
+    // also activate components on shiny output
+    findShinyOutput(chartContent).on('shiny:value',
+      function(event) {
+        var element = $(event.target);
+        setTimeout(function() {
+
+          // see if we opted out of flex based on our output (for shiny
+          // we can't tell what type of output we have until after the
+          // value is bound)
+          var components = componentsFind(element);
+          var flex = forceFlex || componentsFlex(components);
+          if (!flex) {
+            chart.css('height', "");
+            setFlex(chart, "");
+            chart.removeClass('chart-wrapper-flex');
+            chartContent.removeClass('chart-stage-flex');
+            chartContent.children().unwrap();
+          }
+
+          // perform layout
+          componentsLayout(components, title, element.parent());
+        }, 10);
+      });
+
+    // add the title
+    var chartTitle = $('<div class="chart-title"></div>');
+    chartTitle.html(title);
+    chart.prepend(chartTitle);
+
+    // add the notes section
+    var chartNotes = $('<div class="chart-notes"></div>');
+    chartNotes.html('&nbsp;');
+    chart.append(chartNotes);
+
+    // attempt to extract notes if we have a component
+    if (components.length)
+      result.notes = extractChartNotes(chartContent, chartNotes);
+
+    // return result
+    return result;
+  }
+
+  // build a tabset from a section div with the .tabset class
+  function layoutTabset(tabset) {
+
+    // check for fade option
+    var fade = tabset.hasClass("tabset-fade");
+    var navClass = "nav-tabs";
+
+    // determine the heading level of the tabset and tabs
+    var match = tabset.attr('class').match(/level(\d) /);
+    if (match === null)
+      return;
+    var tabsetLevel = Number(match[1]);
+    var tabLevel = tabsetLevel + 1;
+
+    // find all subheadings immediately below
+    var tabs = tabset.find("div.section.level" + tabLevel);
+    if (!tabs.length)
+      return;
+
+    // create tablist and tab-content elements
+    var tabList = $('<ul class="nav ' + navClass + '" role="tablist"></ul>');
+    $(tabs[0]).before(tabList);
+    var tabContent = $('<div class="tab-content"></div>');
+    $(tabs[0]).before(tabContent);
+
+    // build the tabset
+    tabs.each(function(i) {
+
+      // get the tab div
+      var tab = $(tabs[i]);
+
+      // get the id then sanitize it for use with bootstrap tabs
+      var id = tab.attr('id');
+
+      // sanitize the id for use with bootstrap tabs
+      id = id.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_');
+      tab.attr('id', id);
+
+      // get the heading element within it and grab it's text
+      var heading = tab.find('h' + tabLevel + ':first');
+      var headingText = heading.html();
+
+      // build and append the tab list item
+      var a = $('<a role="tab" data-toggle="tab">' + headingText + '</a>');
+      a.attr('href', '#' + id);
+      a.attr('aria-controls', id);
+      var li = $('<li role="presentation"></li>');
+      li.append(a);
+      if (i === 0)
+        li.attr('class', 'active');
+      tabList.append(li);
+
+      // set it's attributes
+      tab.attr('role', 'tabpanel');
+      tab.addClass('tab-pane');
+      tab.addClass('tabbed-pane');
+      tab.addClass('no-title');
+      if (fade)
+        tab.addClass('fade');
+      if (i === 0) {
+        tab.addClass('active');
+        if (fade)
+          tab.addClass('in');
+      }
+
+      // move it into the tab content div
+      tab.detach().appendTo(tabContent);
+    });
+
+    // add nav-tabs-custom
+    tabset.addClass('nav-tabs-custom');
+
+    // internal layout is dashboard-column with tab-content flexing
+    tabset.addClass('dashboard-column');
+    setFlex(tabContent, 1);
+  }
+
+  // one time global initialization for components
+  function componentsInit(dashboardContainer) {
+    for (var i=0; i<window.FlexDashboardComponents.length; i++) {
+      var component = window.FlexDashboardComponents[i];
+      if (component.init)
+        component.init(dashboardContainer);
+    }
+  }
+
+  // find components that apply within a container
+  function componentsFind(container) {
+
+    // look for components
+    var components = [];
+    for (var i=0; i<window.FlexDashboardComponents.length; i++) {
+      var component = window.FlexDashboardComponents[i];
+      if (component.find(container).length)
+        components.push(component);
+    }
+
+    // if there were none then use a special flowing content component
+    // that just adds a scrollbar in fillPage mode
+    if (components.length == 0) {
+      components.push({
+        find: function(container) {
+          return container;
+        },
+
+        flex: function(fillPage) {
+          return fillPage;
+        },
+
+        layout: function(title, container, element, fillPage) {
+          if (fillPage) {
+            container.addClass('flowing-content-shim');
+            container.addClass('flowing-content-container');
+          }
+        }
+      });
+    }
+
+    return components;
+  }
+
+  // if there is a custom component then pick it out
+  function componentsCustom(components) {
+    var customComponent = [];
+    for (var i=0; i<components.length; i++)
+      if (components[i].type === "custom") {
+        customComponent.push(components[i]);
+        break;
+      }
+    return customComponent;
+  }
+
+  // query all components for flex
+  function componentsFlex(components) {
+
+    // no components at all means no flex
+    if (components.length === 0)
+      return false;
+
+    // otherwise query components (assume true unless we see false)
+    var isMobile = isMobilePhone();
+    for (var i=0; i<components.length; i++)
+      if (components[i].flex && !components[i].flex(_options.fillPage))
+        return false;
+    return true;
+  }
+
+  // layout all components
+  function componentsLayout(components, title, container) {
+    var isMobile = isMobilePhone();
+    for (var i=0; i<components.length; i++) {
+      var element = components[i].find(container);
+      if (components[i].layout) {
+        // call layout (don't call other components if it returns false)
+        var result = components[i].layout(title, container, element, _options.fillPage);
+        if (result === false)
+          return;
+      }
+    }
+  }
+
+  // get a reference to the h3, discover it's inner html, and remove it
+  function extractTitle(container) {
+    var h3 = container.children('h3').first();
+    var title = '';
+    if (!container.hasClass('no-title'))
+      title = h3.html();
+    h3.remove();
+    return title;
+  }
+
+  // extract chart notes
+  function extractChartNotes(chartContent, chartNotes) {
+    // look for a terminating blockquote or image caption
+    var blockquote = chartContent.children('blockquote:last-child');
+    var caption = chartContent.children('div.image-container')
+                              .children('p.caption');
+    if (blockquote.length) {
+      chartNotes.html(blockquote.children('p:first-child').html());
+      blockquote.remove();
+      return true;
+    } else if (caption.length) {
+      chartNotes.html(caption.html());
+      caption.remove();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function findShinyOutput(chartContent) {
+    return chartContent.find('.shiny-text-output, .shiny-html-output');
+  }
+
+  // safely detect rendering on a mobile phone
+  function isMobilePhone() {
+    try
+    {
+      return ! window.matchMedia("only screen and (min-width: 768px)").matches;
+    }
+    catch(e) {
+      return false;
+    }
+  }
+
+  function isFillPage() {
+    return _options.fillPage;
+  }
+
+  // detect portrait mode
+  function isPortrait() {
+    return ($(window).width() < $(window).height());
+  }
+
+  // safely detect rendering on a tablet
+  function isTablet() {
+    try
+    {
+      return window.matchMedia("only screen and (min-width: 769px) and (max-width: 992px)").matches;
+    }
+    catch(e) {
+      return false;
+    }
+  }
+
+  // test whether this is a shiny doc
+  function isShinyDoc() {
+    return (typeof(window.Shiny) !== "undefined" && !!window.Shiny.outputBindings);
+  }
+
+  // set flex using vendor specific prefixes
+  function setFlex(el, flex) {
+    el.css('-webkit-box-flex', flex)
+      .css('-webkit-flex', flex)
+      .css('-ms-flex', flex)
+      .css('flex', flex);
+  }
+
+  // support bookmarking of pages
+  function handleLocationHash() {
+
+    // restore tab/page from bookmark
+    var hash = window.location.hash;
+    if (hash.length > 0)
+      $('ul.nav a[href="' + hash + '"]').tab('show');
+    FlexDashboardUtils.manageActiveNavbarMenu();
+
+    // navigate to a tab when the history changes
+    window.addEventListener("popstate", function(e) {
+      var hash = window.location.hash;
+      var activeTab = $('ul.nav a[href="' + hash + '"]');
+      if (activeTab.length) {
+        activeTab.tab('show');
+      } else {
+        $('ul.nav a:first').tab('show');
+      }
+      FlexDashboardUtils.manageActiveNavbarMenu();
+    });
+
+    // add a hash to the URL when the user clicks on a tab/page
+    $('.navbar-nav a[data-toggle="tab"]').on('click', function(e) {
+      var baseUrl = FlexDashboardUtils.urlWithoutHash(window.location.href);
+      var hash = FlexDashboardUtils.urlHash($(this).attr('href'));
+      var href = baseUrl + hash;
+      FlexDashboardUtils.setLocation(href);
+    });
+
+    // handle clicks of other links that should activate pages
+    var navPages = $('ul.navbar-nav li a[data-toggle=tab]');
+    navPages.each(function() {
+      var href =  $(this).attr('href');
+      var links = $('a[href="' + href + '"][data-toggle!=tab]');
+      links.each(function() {
+        $(this).on('click', function(e) {
+          window.FlexDashboardUtils.showPage(href);
+        });
+      });
+    });
+  }
+
+  // tweak Prism highlighting
+  function initPrismHighlighting() {
+
+    if (window.Prism) {
+      Prism.languages.insertBefore('r', 'comment', {
+        'heading': [
+          {
+            // title 1
+        	  // =======
+
+        	  // title 2
+        	  // -------
+        	  pattern: /\w+.*(?:\r?\n|\r)(?:====+|----+)/,
+            alias: 'operator'
+          },
+          {
+            // ### title 3
+            pattern: /(^\s*)###[^#].+/m,
+            lookbehind: true,
+            alias: 'operator'
+          }
+        ]
+      });
+
+      // prism highlight
+      Prism.highlightAll();
+    }
+  }
+
+
+  // get theme color
+  var themeColors = {
+    bootstrap: {
+      primary: "rgba(51, 122, 183, 0.4)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    cerulean: {
+      primary: "rgb(47, 164, 231)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    journal: {
+      primary: "rgba(235, 104, 100, 0.70)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    flatly: {
+      primary: "rgba(44, 62, 80, 0.70)",
+      info: "rgba(52, 152, 219, 0.70)",
+      success: "rgba(24, 188, 156, 0.70)",
+      warning: "rgba(243, 156, 18, 0.70)",
+      danger: "rgba(231, 76, 60, 0.70)"
+    },
+    readable: {
+      primary: "rgba(69, 130, 236, 0.4)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    spacelab: {
+      primary: "rgba(68, 110, 155, 0.25)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    united: {
+      primary: "rgba(221, 72, 20, 0.30)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    cosmo: {
+      primary: "rgba(39, 128, 227, 0.7)",
+      info: "rgba(153, 84, 187, 0.7)",
+      success: "rgba(63, 182, 24, 0.7)",
+      warning: "rgba(255, 117, 24, 0.7)",
+      danger: "rgba(255, 0, 57, 0.7)"
+    },
+    lumen: {
+      primary: "rgba(21, 140, 186, 0.70)",
+      info: "rgba(117, 202, 235, 0.90)",
+      success: "rgba(40, 182, 44, 0.70)",
+      warning: "rgba(255, 133, 27, 0.70)",
+      danger: "rgba(255, 65, 54, 0.70)"
+    },
+    paper: {
+      primary: "rgba(33, 150, 243, 0.35)",
+      info: "rgb(225, 190, 231)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(255, 224, 178)",
+      danger: "rgb(249, 189, 187)"
+    },
+    sandstone: {
+      primary: "rgba(50, 93, 136, 0.3)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    simplex: {
+      primary: "rgba(217, 35, 15, 0.25)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    yeti: {
+      primary: "rgba(0, 140, 186, 0.298039)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    }
+  }
+  function themeColor(color) {
+    return themeColors[_options.theme][color];
+  }
+
+  FlexDashboard.prototype = {
+    constructor: FlexDashboard,
+    init: init,
+    isMobilePhone: isMobilePhone,
+    isFillPage: isFillPage,
+    themeColor: themeColor
+  };
+
+  return FlexDashboard;
+
+})();
+
+// utils
+window.FlexDashboardUtils = {
+  resizableImage: function(img) {
+    var src = img.attr('src');
+    var url = 'url("' + src + '")';
+    img.parent().css('background', url)
+                .css('background-size', 'contain')
+                .css('background-repeat', 'no-repeat')
+                .css('background-position', 'center')
+                .addClass('image-container');
+  },
+  setLocation: function(href) {
+    if (history && history.pushState) {
+      history.pushState(null, null, href);
+    } else {
+      window.location.replace(href);
+    }
+    setTimeout(function() {
+        window.scrollTo(0, 0);
+    }, 10);
+    this.manageActiveNavbarMenu();
+  },
+  showPage: function(href) {
+    $('ul.navbar-nav li a[href="' + href + '"]').tab('show');
+    var baseUrl = this.urlWithoutHash(window.location.href);
+    var loc = baseUrl + href;
+    this.setLocation(loc);
+  },
+  showLinkedValue: function(href) {
+    // check for a page link
+    if ($('ul.navbar-nav li a[data-toggle=tab][href="' + href + '"]').length > 0)
+      this.showPage(href);
+    else
+      window.open(href);
+  },
+  urlWithoutHash: function(url) {
+    var hashLoc = url.indexOf('#');
+    if (hashLoc != -1)
+      return url.substring(0, hashLoc);
+    else
+      return url;
+  },
+  urlHash: function(url) {
+    var hashLoc = url.indexOf('#');
+    if (hashLoc != -1)
+      return url.substring(hashLoc);
+    else
+      return "";
+  },
+  manageActiveNavbarMenu: function () {
+    // remove active from anyone currently active
+    $('.navbar ul.nav').find('li').removeClass('active');
+    // find the active tab
+    var activeTab = $('.dashboard-page-wrapper.tab-pane.active');
+    if (activeTab.length > 0) {
+      var tabId = activeTab.attr('id');
+      if (tabId)
+        $(".navbar ul.nav a[href='#" + tabId + "']").parents('li').addClass('active');
+    }
+  }
+};
+
+window.FlexDashboard = new FlexDashboard();
+
+// empty content
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    if (container.find('p').length == 0)
+      return container;
+    else
+      return $();
+  }
+})
+
+// plot image
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('p')
+                    .children('img:only-child');
+  },
+
+  layout: function(title, container, element, fillPage) {
+    FlexDashboardUtils.resizableImage(element);
+  }
+});
+
+// plot image (figure style)
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('div.figure').children('img');
+  },
+
+  layout: function(title, container, element, fillPage) {
+    FlexDashboardUtils.resizableImage(element);
+  }
+});
+
+// htmlwidget
+window.FlexDashboardComponents.push({
+
+  init: function(dashboardContainer) {
+    // trigger "shown" after initial layout to force static htmlwidgets
+    // in runtime: shiny to be resized after the dom has been transformed
+    dashboardContainer.on('flexdashboard:layoutcomplete', function(event) {
+      setTimeout(function() {
+        dashboardContainer.trigger('shown');
+      }, 200);
+    });
+  },
+
+  find: function(container) {
+    return container.children('div[id^="htmlwidget-"],div.html-widget');
+  }
+});
+
+// gauge
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('div.html-widget.gauge');
+  },
+
+  flex: function(fillPage) {
+    return false;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+
+  }
+
+});
+
+// shiny output
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    return container.children('div[class^="shiny-"]');
+  }
+});
+
+// datatables
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    return container.find('.datatables');
+  },
+  flex: function(fillPage) {
+    return fillPage;
+  }
+});
+
+// bootstrap table
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    var bsTable = container.find('table.table');
+    if (bsTable.length !== 0)
+      return bsTable;
+    else
+      return container.find('tr.header').parent('thead').parent('table');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+    // alias variables
+    var bsTable = element;
+
+    // fixup xtable generated tables with a proper thead
+    var headerRow = bsTable.find('tbody > tr:first-child > th').parent();
+    if (headerRow.length > 0) {
+      var thead = $('<thead></thead>');
+      bsTable.prepend(thead);
+      headerRow.detach().appendTo(thead);
+    }
+
+    // improve appearance
+    container.addClass('bootstrap-table');
+
+    // for fill page provide scrolling w/ sticky headers
+    if (fillPage) {
+      // force scrollbar on overflow
+      container.addClass('flowing-content-shim');
+
+      // stable table headers when scrolling
+      bsTable.stickyTableHeaders({
+        scrollableArea: container
+      });
+    }
+  }
+});
+
+// embedded shiny app
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.find('iframe.shiny-frame');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+    if (fillPage) {
+      element.attr('height', '100%');
+    } else {
+      // provide default height if necessary
+      var height = element.get(0).style.height;
+      if (!height)
+        height = element.attr('height');
+      if (!height)
+        element.attr('height', 500);
+    }
+  }
+});
+
+// shiny fillRow or fillCol
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.find('.flexfill-container');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+    if (fillPage)
+      element.css('height', '100%');
+    else {
+      // provide default height if necessary
+      var height = element.get(0).style.height;
+      if (height === "100%" || height === "auto" || height === "initial" ||
+          height === "inherit" || !height) {
+        element.css('height', 500);
+      }
+    }
+  }
+});
+
+// valueBox
+window.FlexDashboardComponents.push({
+
+  type: "custom",
+
+  find: function(container) {
+    if (container.find('span.value-output, .shiny-valuebox-output').length)
+      return container;
+    else
+      return $();
+  },
+
+  flex: function(fillPage) {
+    return false;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+    // alias variables
+    var chartTitle = title;
+    var valueBox = element;
+
+    // add value-box class to container
+    container.addClass('value-box');
+
+    // value paragraph
+    var value = $('<p class="value"></p>');
+
+    // if we have shiny-text-output then just move it in
+    var valueOutputSpan = [];
+    var shinyOutput = valueBox.find('.shiny-valuebox-output').detach();
+    if (shinyOutput.length) {
+      valueBox.children().remove();
+      shinyOutput.html("&mdash;");
+      value.append(shinyOutput);
+    } else {
+      // extract the value (remove leading vector index)
+      var chartValue = valueBox.text().trim();
+      chartValue = chartValue.replace("[1] ", "");
+      valueOutputSpan = valueBox.find('span.value-output').detach();
+      valueBox.children().remove();
+      value.text(chartValue);
+    }
+
+    // caption
+    var caption = $('<p class="caption"></p>');
+    caption.html(chartTitle);
+
+    // build inner div for value box and add it
+    var inner = $('<div class="inner"></div>');
+    inner.append(value);
+    inner.append(caption);
+    valueBox.append(inner);
+
+    // add icon if specified
+    var icon = $('<div class="icon"><i></i></div>');
+    valueBox.append(icon);
+    function setIcon(chartIcon) {
+      var iconLib = "";
+      var components = chartIcon.split("-");
+      if (components.length > 1)
+        iconLib = components[0];
+      icon.children('i').attr('class', iconLib + ' ' + chartIcon);
+    }
+    var chartIcon = valueBox.attr('data-icon');
+    if (chartIcon)
+      setIcon(chartIcon);
+
+    // set color based on data-background if necessary
+    var dataBackground = valueBox.attr('data-background');
+    if (dataBackground)
+      valueBox.css('background-color', bgColor);
+    else {
+      // default to bg-primary if no other background is specified
+      if (!valueBox.hasClass('bg-primary') &&
+          !valueBox.hasClass('bg-info') &&
+          !valueBox.hasClass('bg-warning') &&
+          !valueBox.hasClass('bg-success') &&
+          !valueBox.hasClass('bg-danger')) {
+        valueBox.addClass('bg-primary');
+      }
+    }
+
+    // handle data attributes in valueOutputSpan
+    function handleValueOutput(valueOutput) {
+
+      // caption
+      var dataCaption = valueOutput.attr('data-caption');
+      if (dataCaption)
+        caption.html(dataCaption);
+
+      // icon
+      var dataIcon = valueOutput.attr('data-icon');
+      if (dataIcon)
+        setIcon(dataIcon);
+
+      // color
+      var dataColor = valueOutput.attr('data-color');
+      if (dataColor) {
+        if (dataColor.indexOf('bg-') === 0) {
+          valueBox.css('background-color', '');
+          if (!valueBox.hasClass(dataColor)) {
+             valueBox.removeClass('bg-primary bg-info bg-warning bg-danger bg-success');
+             valueBox.addClass(dataColor);
+          }
+        } else {
+          valueBox.removeClass('bg-primary bg-info bg-warning bg-danger bg-success');
+          valueBox.css('background-color', dataColor);
+        }
+      }
+
+      // url
+      var dataHref = valueOutput.attr('data-href');
+      if (dataHref) {
+        valueBox.addClass('linked-value');
+        valueBox.off('click.value-box');
+        valueBox.on('click.value-box', function(e) {
+          window.FlexDashboardUtils.showLinkedValue(dataHref);
+        });
+      }
+    }
+
+    // check for a valueOutputSpan
+    if (valueOutputSpan.length > 0) {
+      handleValueOutput(valueOutputSpan);
+    }
+
+    // if we have a shinyOutput then bind a listener to handle
+    // new valueOutputSpan values
+    shinyOutput.on('shiny:value',
+      function(event) {
+        var element = $(event.target);
+        setTimeout(function() {
+          var valueOutputSpan = element.find('span.value-output');
+          if (valueOutputSpan.length > 0)
+            handleValueOutput(valueOutputSpan);
+        }, 10);
+      }
+    );
+  }
+});
+
+
+</script>
+
+<div id="dashboard-container">
+
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="dashboard" class="section level1" data-icon="ion-stats-bars">
+<h1>Dashboard</h1>
+<div id="column" class="section level2" data-width="350">
+<h2>Column</h2>
+<div id="chart-c" class="section level3">
+<h3>Chart C</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<p><div id="country" class="form-group crosstalk-input-select crosstalk-input">
+<label class="control-label" for="country">Country</label>
+<div>
+<select multiple></select>
+<script type="application/json" data-for="country">{
+  "items": {
+    "value": ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Faroe Islands", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar", "Malaysia", "Maldives", "Malta", "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Republic of the Congo", "Romania", "Russia", "Rwanda", "Saint Lucia", "Saint Vincent and the Grenadines", "San Marino", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Singapore", "Slovakia", "Slovenia", "Somalia", "South Africa", "South Korea", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tanzania", "Thailand", "Togo", "Trinidad and Tobago", "Tunisia", "Turkey", "Turks and Caicos Islands", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "United States Virgin Islands", "Uruguay", "Uzbekistan", "Vatican City", "Venezuela", "Vietnam", "Zambia", "Zimbabwe"],
+    "label": ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Faroe Islands", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar", "Malaysia", "Maldives", "Malta", "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Republic of the Congo", "Romania", "Russia", "Rwanda", "Saint Lucia", "Saint Vincent and the Grenadines", "San Marino", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Singapore", "Slovakia", "Slovenia", "Somalia", "South Africa", "South Korea", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tanzania", "Thailand", "Togo", "Trinidad and Tobago", "Tunisia", "Turkey", "Turks and Caicos Islands", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "United States Virgin Islands", "Uruguay", "Uzbekistan", "Vatican City", "Venezuela", "Vietnam", "Zambia", "Zimbabwe"]
+  },
+  "map": {
+    "Afghanistan": ["3"],
+    "Albania": ["5"],
+    "Algeria": ["49"],
+    "Andorra": ["1"],
+    "Angola": ["8"],
+    "Antigua and Barbuda": ["4"],
+    "Argentina": ["9"],
+    "Armenia": ["6"],
+    "Australia": ["11"],
+    "Austria": ["10"],
+    "Azerbaijan": ["12"],
+    "Bahamas": ["25"],
+    "Bahrain": ["19"],
+    "Bangladesh": ["15"],
+    "Barbados": ["14"],
+    "Belarus": ["27"],
+    "Belgium": ["16"],
+    "Belize": ["28"],
+    "Benin": ["20"],
+    "Bermuda": ["21"],
+    "Bhutan": ["26"],
+    "Bolivia": ["23"],
+    "Bosnia and Herzegovina": ["13"],
+    "Brazil": ["24"],
+    "Brunei": ["22"],
+    "Bulgaria": ["18"],
+    "Burkina Faso": ["17"],
+    "Cambodia": ["94"],
+    "Cameroon": ["36"],
+    "Canada": ["29"],
+    "Cape Verde": ["41"],
+    "Cayman Islands": ["97"],
+    "Central African Republic": ["31"],
+    "Chad": ["163"],
+    "Chile": ["35"],
+    "China": ["37"],
+    "Colombia": ["38"],
+    "Costa Rica": ["39"],
+    "Croatia": ["76"],
+    "Cuba": ["40"],
+    "Cyprus": ["42"],
+    "Czech Republic": ["43"],
+    "Democratic Republic of the Congo": ["30"],
+    "Denmark": ["46"],
+    "Djibouti": ["45"],
+    "Dominica": ["47"],
+    "Dominican Republic": ["48"],
+    "East Timor": ["166"],
+    "Ecuador": ["50"],
+    "Egypt": ["52"],
+    "El Salvador": ["159"],
+    "Equatorial Guinea": ["70"],
+    "Eritrea": ["53"],
+    "Estonia": ["51"],
+    "Ethiopia": ["55"],
+    "Faroe Islands": ["58"],
+    "Fiji": ["57"],
+    "Finland": ["56"],
+    "France": ["59"],
+    "Gabon": ["60"],
+    "Gambia": ["68"],
+    "Georgia": ["63"],
+    "Germany": ["44"],
+    "Ghana": ["65"],
+    "Gibraltar": ["66"],
+    "Greece": ["71"],
+    "Greenland": ["67"],
+    "Grenada": ["62"],
+    "Guam": ["73"],
+    "Guatemala": ["72"],
+    "Guernsey": ["64"],
+    "Guinea": ["69"],
+    "Guyana": ["74"],
+    "Haiti": ["77"],
+    "Honduras": ["75"],
+    "Hungary": ["78"],
+    "Iceland": ["86"],
+    "India": ["83"],
+    "Indonesia": ["79"],
+    "Iran": ["85"],
+    "Iraq": ["84"],
+    "Ireland": ["80"],
+    "Isle of Man": ["82"],
+    "Israel": ["81"],
+    "Italy": ["87"],
+    "Ivory Coast": ["34"],
+    "Jamaica": ["89"],
+    "Japan": ["91"],
+    "Jersey": ["88"],
+    "Jordan": ["90"],
+    "Kazakhstan": ["98"],
+    "Kenya": ["92"],
+    "Kosovo": ["182"],
+    "Kuwait": ["96"],
+    "Kyrgyzstan": ["93"],
+    "Laos": ["99"],
+    "Latvia": ["107"],
+    "Lebanon": ["100"],
+    "Liberia": ["104"],
+    "Libya": ["108"],
+    "Liechtenstein": ["102"],
+    "Lithuania": ["105"],
+    "Luxembourg": ["106"],
+    "Macedonia": ["114"],
+    "Madagascar": ["113"],
+    "Malaysia": ["123"],
+    "Maldives": ["121"],
+    "Malta": ["119"],
+    "Mauritania": ["117"],
+    "Mauritius": ["120"],
+    "Mexico": ["122"],
+    "Moldova": ["111"],
+    "Monaco": ["110"],
+    "Mongolia": ["116"],
+    "Montenegro": ["112"],
+    "Montserrat": ["118"],
+    "Morocco": ["109"],
+    "Mozambique": ["124"],
+    "Myanmar": ["115"],
+    "Nepal": ["131"],
+    "Netherlands": ["129"],
+    "Netherlands Antilles": ["7"],
+    "New Caledonia": ["125"],
+    "New Zealand": ["132"],
+    "Nicaragua": ["128"],
+    "Niger": ["126"],
+    "Nigeria": ["127"],
+    "Norway": ["130"],
+    "Oman": ["133"],
+    "Pakistan": ["138"],
+    "Palestine": ["140"],
+    "Panama": ["134"],
+    "Papua New Guinea": ["136"],
+    "Paraguay": ["142"],
+    "Peru": ["135"],
+    "Philippines": ["137"],
+    "Poland": ["139"],
+    "Portugal": ["141"],
+    "Qatar": ["143"],
+    "Republic of the Congo": ["32"],
+    "Romania": ["144"],
+    "Russia": ["146"],
+    "Rwanda": ["147"],
+    "Saint Lucia": ["101"],
+    "Saint Vincent and the Grenadines": ["178"],
+    "San Marino": ["155"],
+    "Saudi Arabia": ["148"],
+    "Senegal": ["156"],
+    "Serbia": ["145"],
+    "Seychelles": ["149"],
+    "Singapore": ["152"],
+    "Slovakia": ["154"],
+    "Slovenia": ["153"],
+    "Somalia": ["157"],
+    "South Africa": ["183"],
+    "South Korea": ["95"],
+    "Spain": ["54"],
+    "Sri Lanka": ["103"],
+    "Sudan": ["150"],
+    "Suriname": ["158"],
+    "Swaziland": ["161"],
+    "Sweden": ["151"],
+    "Switzerland": ["33"],
+    "Syria": ["160"],
+    "Taiwan": ["170"],
+    "Tanzania": ["171"],
+    "Thailand": ["165"],
+    "Togo": ["164"],
+    "Trinidad and Tobago": ["169"],
+    "Tunisia": ["167"],
+    "Turkey": ["168"],
+    "Turks and Caicos Islands": ["162"],
+    "Uganda": ["173"],
+    "Ukraine": ["172"],
+    "United Arab Emirates": ["2"],
+    "United Kingdom": ["61"],
+    "United States of America": ["174"],
+    "United States Virgin Islands": ["180"],
+    "Uruguay": ["175"],
+    "Uzbekistan": ["176"],
+    "Vatican City": ["177"],
+    "Venezuela": ["179"],
+    "Vietnam": ["181"],
+    "Zambia": ["184"],
+    "Zimbabwe": ["185"]
+  },
+  "group": ["SharedData8c53e584"]
+}</script>
+</div>
+</div><div id="date" class="form-group crosstalk-input-select crosstalk-input">
+<label class="control-label" for="date">Date</label>
+<div>
+<select></select>
+<script type="application/json" data-for="date">{
+  "items": {
+    "value": ["2020-03-25"],
+    "label": ["2020-03-25"]
+  },
+  "map": {
+    "2020-03-25": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178", "179", "180", "181", "182", "183", "184", "185"]
+  },
+  "group": ["SharedData8c53e584"]
+}</script>
+</div>
+</div></p>
+</div>
+<div id="chart-d" class="section level3">
+<h3>Chart D</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<p class="value">
+<span id="htmlwidget-4c578a5ae59ee5576d07" class="summarywidget html-widget"></span>
+<script type="application/json" data-for="htmlwidget-4c578a5ae59ee5576d07">{"x":{"data":[164,248,42,3,123,265,22,2,387,5282,2423,87,162,18,39,4269,99,220,390,5,6,104,32,2201,4,2,81,1,1959,45,4,4,8789,73,922,72,81847,235,177,48,3,124,1394,31554,3,1591,2,312,231,1082,369,366,1,39673,11,792,5,122,22302,6,8077,1,70,23,53,15,4,3,4,9,743,21,32,5,36,382,7,226,686,1329,1930,23,562,316,24811,648,69176,18,21,127,1193,25,42,91,9137,191,3,79,2,304,2,47,102,3,209,1099,197,1,170,27,125,47,19,148,3,10,2,1,120,42,13,405,1624,1,9,7,44,2,5560,2566,3,189,84,443,416,1,552,991,901,60,2362,37,526,762,249,495,40,767,7,3,2272,558,480,204,187,86,1,8,9,1,4,1,3,18,934,1,114,1872,57,216,12,84,9,55231,189,55,1,1,91,17,134,63,557,3,2],"settings":{"statistic":"sum","digits":0,"crosstalk_key":["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185"],"crosstalk_group":"SharedData8c53e584"}},"evals":[],"jsHooks":[]}</script>
+<span class="caption">Variances</span>
+</p>
+</div>
+<div id="chart-b" class="section level3">
+<h3>Chart B</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-7678b81c20b692785044" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7678b81c20b692785044">{"x":{"crosstalkOptions":{"key":["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185"],"group":"SharedData8c53e584"},"filter":"none","fillContainer":true,"data":[["2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25","2020-03-25"],["AD","AE","AF","AG","AL","AM","AN","AO","AR","AT","AU","AZ","BA","BB","BD","BE","BF","BG","BH","BJ","BM","BN","BO","BR","BS","BT","BY","BZ","CA","CD","CF","CG","CH","CI","CL","CM","CN","CO","CR","CU","CV","CY","CZ","DE","DJ","DK","DM","DO","DZ","EC","EE","EG","ER","ES","ET","FI","FJ","FO","FR","GA","GB","GD","GE","GG","GH","GI","GL","GM","GN","GQ","GR","GT","GU","GY","HN","HR","HT","HU","ID","IE","IL","IM","IN","IQ","IR","IS","IT","JE","JM","JO","JP","KE","KG","KH","KR","KW","KY","KZ","LA","LB","LC","LI","LK","LR","LT","LU","LV","LY","MA","MC","MD","ME","MG","MK","MM","MN","MR","MS","MT","MU","MV","MX","MY","MZ","NC","NE","NG","NI","NL","NO","NP","NZ","OM","PA","PE","PG","PH","PK","PL","PS","PT","PY","QA","RO","RS","RU","RW","SA","SC","SD","SE","SG","SI","SK","SM","SN","SO","SR","SV","SY","SZ","TC","TD","TG","TH","TL","TN","TR","TT","TW","TZ","UA","UG","US","UY","UZ","VA","VC","VE","VI","VN","XK","ZA","ZM","ZW"],["Andorra","United Arab Emirates","Afghanistan","Antigua and Barbuda","Albania","Armenia","Netherlands Antilles","Angola","Argentina","Austria","Australia","Azerbaijan","Bosnia and Herzegovina","Barbados","Bangladesh","Belgium","Burkina Faso","Bulgaria","Bahrain","Benin","Bermuda","Brunei","Bolivia","Brazil","Bahamas","Bhutan","Belarus","Belize","Canada","Democratic Republic of the Congo","Central African Republic","Republic of the Congo","Switzerland","Ivory Coast","Chile","Cameroon","China","Colombia","Costa Rica","Cuba","Cape Verde","Cyprus","Czech Republic","Germany","Djibouti","Denmark","Dominica","Dominican Republic","Algeria","Ecuador","Estonia","Egypt","Eritrea","Spain","Ethiopia","Finland","Fiji","Faroe Islands","France","Gabon","United Kingdom","Grenada","Georgia","Guernsey","Ghana","Gibraltar","Greenland","Gambia","Guinea","Equatorial Guinea","Greece","Guatemala","Guam","Guyana","Honduras","Croatia","Haiti","Hungary","Indonesia","Ireland","Israel","Isle of Man","India","Iraq","Iran","Iceland","Italy","Jersey","Jamaica","Jordan","Japan","Kenya","Kyrgyzstan","Cambodia","South Korea","Kuwait","Cayman Islands","Kazakhstan","Laos","Lebanon","Saint Lucia","Liechtenstein","Sri Lanka","Liberia","Lithuania","Luxembourg","Latvia","Libya","Morocco","Monaco","Moldova","Montenegro","Madagascar","Macedonia","Myanmar","Mongolia","Mauritania","Montserrat","Malta","Mauritius","Maldives","Mexico","Malaysia","Mozambique","New Caledonia","Niger","Nigeria","Nicaragua","Netherlands","Norway","Nepal","New Zealand","Oman","Panama","Peru","Papua New Guinea","Philippines","Pakistan","Poland","Palestine","Portugal","Paraguay","Qatar","Romania","Serbia","Russia","Rwanda","Saudi Arabia","Seychelles","Sudan","Sweden","Singapore","Slovenia","Slovakia","San Marino","Senegal","Somalia","Suriname","El Salvador","Syria","Swaziland","Turks and Caicos Islands","Chad","Togo","Thailand","East Timor","Tunisia","Turkey","Trinidad and Tobago","Taiwan","Tanzania","Ukraine","Uganda","United States of America","Uruguay","Uzbekistan","Vatican City","Saint Vincent and the Grenadines","Venezuela","United States Virgin Islands","Vietnam","Kosovo","South Africa","Zambia","Zimbabwe"],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],[164,248,42,3,123,265,22,2,387,5282,2423,87,162,18,39,4269,99,220,390,5,6,104,32,2201,4,2,81,1,1959,45,4,4,8789,73,922,72,81847,235,177,48,3,124,1394,31554,3,1591,2,312,231,1082,369,366,1,39673,11,792,5,122,22302,6,8077,1,70,23,53,15,4,3,4,9,743,21,32,5,36,382,7,226,686,1329,1930,23,562,316,24811,648,69176,18,21,127,1193,25,42,91,9137,191,3,79,2,304,2,47,102,3,209,1099,197,1,170,27,125,47,19,148,3,10,2,1,120,42,13,405,1624,1,9,7,44,2,5560,2566,3,189,84,443,416,1,552,991,901,60,2362,37,526,762,249,495,40,767,7,3,2272,558,480,204,187,86,1,8,9,1,4,1,3,18,934,1,114,1872,57,216,12,84,9,55231,189,55,1,1,91,17,134,63,557,3,2],[0,2,1,0,5,0,0,0,6,30,8,1,2,0,4,122,3,3,3,0,0,0,0,46,0,0,0,0,27,3,0,0,86,0,2,1,3287,3,2,1,1,3,3,149,0,32,0,6,17,27,0,19,0,2696,0,1,0,0,1100,1,422,0,0,0,2,0,0,1,0,0,20,1,1,1,0,1,0,10,55,7,3,0,9,27,1934,2,6820,0,1,0,43,0,0,0,126,0,1,0,0,4,0,0,0,0,2,8,0,0,5,0,1,0,0,2,0,0,0,0,0,2,0,5,15,0,0,1,1,0,276,10,0,0,0,6,7,0,35,7,10,0,33,3,0,11,1,0,0,1,0,1,36,2,3,0,21,0,0,0,0,0,0,0,0,0,4,0,3,44,0,2,0,3,0,801,0,0,0,0,0,0,0,1,0,0,1],[42.546245,23.424076,33.93911,17.060816,41.153332,40.069099,12.226079,-11.202692,-38.416097,47.516231,-25.274398,40.143105,43.915886,13.193887,23.684994,50.503887,12.238333,42.733883,25.930414,9.30769,32.321384,4.535277,-16.290154,-14.235004,25.03428,27.514162,53.709807,17.189877,56.130366,-4.038333,6.611111,-0.228021,46.818188,7.539989,-35.675147,7.369722,35.86166,4.570868,9.748917,21.521757,16.002082,35.126413,49.817492,51.165691,11.825138,56.26392,15.414999,18.735693,28.033886,-1.831239,58.595272,26.820553,15.179384,40.463667,9.145,61.92411,-16.578193,61.892635,46.227638,-0.803689,55.378051,12.262776,42.315407,49.465691,7.946527,36.137741,71.706936,13.443182,9.945587,1.650801,39.074208,15.783471,13.444304,4.860416,15.199999,45.1,18.971187,47.162494,-0.789275,53.41291,31.046051,54.236107,20.593684,33.223191,32.427908,64.963051,41.87194,49.214439,18.109581,30.585164,36.204824,-0.023559,41.20438,12.565679,35.907757,29.31166,19.513469,48.019573,19.85627,33.854721,13.909444,47.166,7.873054,6.428055,55.169438,49.815273,56.879635,26.3351,31.791702,43.750298,47.411631,42.708678,-18.766947,41.608635,21.913965,46.862496,21.00789,16.742498,35.937496,-20.348404,3.202778,23.634501,4.210484,-18.665695,-20.904305,17.607789,9.081999,12.865416,52.132633,60.472024,28.394857,-40.900557,21.512583,8.537981,-9.189967,-6.314993,12.879721,30.375321,51.919438,31.952162,39.399872,-23.442503,25.354826,45.943161,44.016521,61.52401,-1.940278,23.885942,-4.679574,12.862807,60.128161,1.352083,46.151241,48.669026,43.94236,14.497401,5.152149,3.919305,13.794185,34.802075,-26.522503,21.694025,15.454166,8.619543,15.870032,-8.874217,33.886917,38.963745,10.691803,23.69781,-6.369028,48.379433,1.373333,37.09024,-32.522779,41.377491,41.902916,12.984305,6.42375,18.335765,14.058324,42.602636,-30.559482,-13.133897,-19.015438],[1.601554,53.847818,67.709953,-61.796428,20.168331,45.038189,-69.060087,17.873887,-63.616672,14.550072,133.775136,47.576927,17.679076,-59.543198,90.356331,4.469936,-1.561593,25.48583,50.637772,2.315834,-64.75737,114.727669,-63.588653,-51.92528,-77.39628,90.433601,27.953389,-88.49765,-106.346771,21.758664,20.939444,15.827659,8.227512,-5.54708,-71.542969,12.354722,104.195397,-74.297333,-83.753428,-77.781167,-24.013197,33.429859,15.472962,10.451526,42.590275,9.501785,-61.370976,-70.162651,1.659626,-78.183406,25.013607,30.802498,39.782334,-3.74922,40.489673,25.748151,179.414413,-6.911806,2.213749,11.609444,-3.435973,-61.604171,43.356892,-2.585278,-1.023194,-5.345374,-42.604303,-15.310139,-9.696645,10.267895,21.824312,-90.230759,144.793731,-58.93018,-86.241905,15.2,-72.285215,19.503304,113.921327,-8.24389,34.851612,-4.548056,78.96288,43.679291,53.688046,-19.020835,12.56738,-2.13125,-77.297508,36.238414,138.252924,37.906193,74.766098,104.990963,127.766922,47.481766,-80.566956,66.923684,102.495496,35.862285,-60.978893,9.555373,80.771797,-9.429499,23.881275,6.129583,24.603189,17.228331,-7.09262,7.412841,28.369885,19.37439,46.869107,21.745275,95.956223,103.846656,-10.940835,-62.187366,14.375416,57.552152,73.22068,-102.552784,101.975766,35.529562,165.618042,8.081666,8.675277,-85.207229,5.291266,8.468946,84.124008,174.885971,55.923255,-80.782127,-75.015152,143.95555,121.774017,69.345116,19.145136,35.233154,-8.224454,-58.443832,51.183884,24.96676,21.005859,105.318756,29.873888,45.079162,55.491977,30.217636,18.643501,103.819836,14.995463,19.699024,12.457777,-14.452362,46.199616,-56.027783,-88.89653,38.996815,31.465866,-71.797928,18.732207,0.824782,100.992541,125.727539,9.537499,35.243322,-61.222503,120.960515,34.888822,31.16558,32.290275,-95.712891,-55.765835,64.585262,12.453389,-61.287228,-66.58973,-64.896335,108.277199,20.902977,22.937506,27.849332,29.154857],[77142,9770529,38041754,97118,2880917,2957731,null,31825295,44780677,8955102,25203198,10047718,3301000,287025,163046161,11539328,20321378,7000119,1641172,11801151,62506,433285,11513100,211049527,389482,763092,9452411,390353,37411047,86790567,4745185,5380508,8591365,25716544,18952038,25876380,1433783686,50339443,5047561,11333483,549935,1179551,10689209,83517045,973560,5771876,71808,10738958,43053054,17373662,1325648,100388073,3497117,46736776,112078730,5532156,889953,48678,65129728,2172579,67530172,112003,3996765,172259,28833629,33701,56672,2347706,12771246,1355986,10473455,17581472,167294,782766,9746117,4130304,11263770,9684679,270625568,4882495,8519377,84584,1366417754,39309783,82913906,339031,60550075,172259,2948279,10101694,126860301,52573973,6415850,16486542,51225308,4207083,64948,18551427,7169455,6855713,182790,38019,21323733,4937374,2759627,615729,1906743,6777452,36471769,38964,4043263,627987,26969307,2083459,54045420,3225167,4525696,4989,440372,1198575,530953,127575529,31949777,30366036,282750,23310715,200963599,6545502,17097130,5378857,28608710,4783063,4974986,4246439,32510453,8776109,108116615,216565318,37887768,4981420,10226187,7044636,2832067,19364557,8772235,145872256,12626950,34268528,97739,42813238,10036379,5804337,2078654,5457013,33860,16296364,15442905,581372,6453553,17070135,1148130,38191,15946876,8082366,69037513,1293119,11694719,83429615,1394973,23773876,58005463,43993638,44269594,329064917,3461734,32981716,799,110589,28515829,null,96462106,null,58558270,17861030,14645468],["101-1000","101-1000","11-100","1-10","101-1000","101-1000","11-100","1-10","101-1000","1001-10000","1001-10000","11-100","101-1000","11-100","11-100","1001-10000","11-100","101-1000","101-1000","1-10","1-10","101-1000","11-100","1001-10000","1-10","1-10","11-100","1-10","1001-10000","11-100","1-10","1-10","1001-10000","11-100","101-1000","11-100","10000-","101-1000","101-1000","11-100","1-10","101-1000","1001-10000","10000-","1-10","1001-10000","1-10","101-1000","101-1000","1001-10000","101-1000","101-1000","1-10","10000-","11-100","101-1000","1-10","101-1000","10000-","1-10","1001-10000","1-10","11-100","11-100","11-100","11-100","1-10","1-10","1-10","1-10","101-1000","11-100","11-100","1-10","11-100","101-1000","1-10","101-1000","101-1000","1001-10000","1001-10000","11-100","101-1000","101-1000","10000-","101-1000","10000-","11-100","11-100","101-1000","1001-10000","11-100","11-100","11-100","1001-10000","101-1000","1-10","11-100","1-10","101-1000","1-10","11-100","101-1000","1-10","101-1000","1001-10000","101-1000","1-10","101-1000","11-100","101-1000","11-100","11-100","101-1000","1-10","1-10","1-10","1-10","101-1000","11-100","11-100","101-1000","1001-10000","1-10","1-10","1-10","11-100","1-10","1001-10000","1001-10000","1-10","101-1000","11-100","101-1000","101-1000","1-10","101-1000","101-1000","101-1000","11-100","1001-10000","11-100","101-1000","101-1000","101-1000","101-1000","11-100","101-1000","1-10","1-10","1001-10000","101-1000","101-1000","101-1000","101-1000","11-100","1-10","1-10","1-10","1-10","1-10","1-10","1-10","11-100","101-1000","1-10","101-1000","1001-10000","11-100","101-1000","11-100","11-100","1-10","10000-","101-1000","11-100","1-10","1-10","11-100","11-100","101-1000","11-100","101-1000","1-10","1-10"],["Andorra &lt;br&gt;  &lt;br&gt; #Confirmed: 164 &lt;br&gt; #Deaths: 0","United Arab Emirates &lt;br&gt;  &lt;br&gt; #Confirmed: 248 &lt;br&gt; #Deaths: 2","Afghanistan &lt;br&gt;  &lt;br&gt; #Confirmed: 42 &lt;br&gt; #Deaths: 1","Antigua and Barbuda &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 0","Albania &lt;br&gt;  &lt;br&gt; #Confirmed: 123 &lt;br&gt; #Deaths: 5","Armenia &lt;br&gt;  &lt;br&gt; #Confirmed: 265 &lt;br&gt; #Deaths: 0","Netherlands Antilles &lt;br&gt;  &lt;br&gt; #Confirmed: 22 &lt;br&gt; #Deaths: 0","Angola &lt;br&gt;  &lt;br&gt; #Confirmed: 2 &lt;br&gt; #Deaths: 0","Argentina &lt;br&gt;  &lt;br&gt; #Confirmed: 387 &lt;br&gt; #Deaths: 6","Austria &lt;br&gt;  &lt;br&gt; #Confirmed: 5282 &lt;br&gt; #Deaths: 30","Australia &lt;br&gt;  &lt;br&gt; #Confirmed: 2423 &lt;br&gt; #Deaths: 8","Azerbaijan &lt;br&gt;  &lt;br&gt; #Confirmed: 87 &lt;br&gt; #Deaths: 1","Bosnia and Herzegovina &lt;br&gt;  &lt;br&gt; #Confirmed: 162 &lt;br&gt; #Deaths: 2","Barbados &lt;br&gt;  &lt;br&gt; #Confirmed: 18 &lt;br&gt; #Deaths: 0","Bangladesh &lt;br&gt;  &lt;br&gt; #Confirmed: 39 &lt;br&gt; #Deaths: 4","Belgium &lt;br&gt;  &lt;br&gt; #Confirmed: 4269 &lt;br&gt; #Deaths: 122","Burkina Faso &lt;br&gt;  &lt;br&gt; #Confirmed: 99 &lt;br&gt; #Deaths: 3","Bulgaria &lt;br&gt;  &lt;br&gt; #Confirmed: 220 &lt;br&gt; #Deaths: 3","Bahrain &lt;br&gt;  &lt;br&gt; #Confirmed: 390 &lt;br&gt; #Deaths: 3","Benin &lt;br&gt;  &lt;br&gt; #Confirmed: 5 &lt;br&gt; #Deaths: 0","Bermuda &lt;br&gt;  &lt;br&gt; #Confirmed: 6 &lt;br&gt; #Deaths: 0","Brunei &lt;br&gt;  &lt;br&gt; #Confirmed: 104 &lt;br&gt; #Deaths: 0","Bolivia &lt;br&gt;  &lt;br&gt; #Confirmed: 32 &lt;br&gt; #Deaths: 0","Brazil &lt;br&gt;  &lt;br&gt; #Confirmed: 2201 &lt;br&gt; #Deaths: 46","Bahamas &lt;br&gt;  &lt;br&gt; #Confirmed: 4 &lt;br&gt; #Deaths: 0","Bhutan &lt;br&gt;  &lt;br&gt; #Confirmed: 2 &lt;br&gt; #Deaths: 0","Belarus &lt;br&gt;  &lt;br&gt; #Confirmed: 81 &lt;br&gt; #Deaths: 0","Belize &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Canada &lt;br&gt;  &lt;br&gt; #Confirmed: 1959 &lt;br&gt; #Deaths: 27","Democratic Republic of the Congo &lt;br&gt;  &lt;br&gt; #Confirmed: 45 &lt;br&gt; #Deaths: 3","Central African Republic &lt;br&gt;  &lt;br&gt; #Confirmed: 4 &lt;br&gt; #Deaths: 0","Republic of the Congo &lt;br&gt;  &lt;br&gt; #Confirmed: 4 &lt;br&gt; #Deaths: 0","Switzerland &lt;br&gt;  &lt;br&gt; #Confirmed: 8789 &lt;br&gt; #Deaths: 86","Ivory Coast &lt;br&gt;  &lt;br&gt; #Confirmed: 73 &lt;br&gt; #Deaths: 0","Chile &lt;br&gt;  &lt;br&gt; #Confirmed: 922 &lt;br&gt; #Deaths: 2","Cameroon &lt;br&gt;  &lt;br&gt; #Confirmed: 72 &lt;br&gt; #Deaths: 1","China &lt;br&gt;  &lt;br&gt; #Confirmed: 81847 &lt;br&gt; #Deaths: 3287","Colombia &lt;br&gt;  &lt;br&gt; #Confirmed: 235 &lt;br&gt; #Deaths: 3","Costa Rica &lt;br&gt;  &lt;br&gt; #Confirmed: 177 &lt;br&gt; #Deaths: 2","Cuba &lt;br&gt;  &lt;br&gt; #Confirmed: 48 &lt;br&gt; #Deaths: 1","Cape Verde &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 1","Cyprus &lt;br&gt;  &lt;br&gt; #Confirmed: 124 &lt;br&gt; #Deaths: 3","Czech Republic &lt;br&gt;  &lt;br&gt; #Confirmed: 1394 &lt;br&gt; #Deaths: 3","Germany &lt;br&gt;  &lt;br&gt; #Confirmed: 31554 &lt;br&gt; #Deaths: 149","Djibouti &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 0","Denmark &lt;br&gt;  &lt;br&gt; #Confirmed: 1591 &lt;br&gt; #Deaths: 32","Dominica &lt;br&gt;  &lt;br&gt; #Confirmed: 2 &lt;br&gt; #Deaths: 0","Dominican Republic &lt;br&gt;  &lt;br&gt; #Confirmed: 312 &lt;br&gt; #Deaths: 6","Algeria &lt;br&gt;  &lt;br&gt; #Confirmed: 231 &lt;br&gt; #Deaths: 17","Ecuador &lt;br&gt;  &lt;br&gt; #Confirmed: 1082 &lt;br&gt; #Deaths: 27","Estonia &lt;br&gt;  &lt;br&gt; #Confirmed: 369 &lt;br&gt; #Deaths: 0","Egypt &lt;br&gt;  &lt;br&gt; #Confirmed: 366 &lt;br&gt; #Deaths: 19","Eritrea &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Spain &lt;br&gt;  &lt;br&gt; #Confirmed: 39673 &lt;br&gt; #Deaths: 2696","Ethiopia &lt;br&gt;  &lt;br&gt; #Confirmed: 11 &lt;br&gt; #Deaths: 0","Finland &lt;br&gt;  &lt;br&gt; #Confirmed: 792 &lt;br&gt; #Deaths: 1","Fiji &lt;br&gt;  &lt;br&gt; #Confirmed: 5 &lt;br&gt; #Deaths: 0","Faroe Islands &lt;br&gt;  &lt;br&gt; #Confirmed: 122 &lt;br&gt; #Deaths: 0","France &lt;br&gt;  &lt;br&gt; #Confirmed: 22302 &lt;br&gt; #Deaths: 1100","Gabon &lt;br&gt;  &lt;br&gt; #Confirmed: 6 &lt;br&gt; #Deaths: 1","United Kingdom &lt;br&gt;  &lt;br&gt; #Confirmed: 8077 &lt;br&gt; #Deaths: 422","Grenada &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Georgia &lt;br&gt;  &lt;br&gt; #Confirmed: 70 &lt;br&gt; #Deaths: 0","Guernsey &lt;br&gt;  &lt;br&gt; #Confirmed: 23 &lt;br&gt; #Deaths: 0","Ghana &lt;br&gt;  &lt;br&gt; #Confirmed: 53 &lt;br&gt; #Deaths: 2","Gibraltar &lt;br&gt;  &lt;br&gt; #Confirmed: 15 &lt;br&gt; #Deaths: 0","Greenland &lt;br&gt;  &lt;br&gt; #Confirmed: 4 &lt;br&gt; #Deaths: 0","Gambia &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 1","Guinea &lt;br&gt;  &lt;br&gt; #Confirmed: 4 &lt;br&gt; #Deaths: 0","Equatorial Guinea &lt;br&gt;  &lt;br&gt; #Confirmed: 9 &lt;br&gt; #Deaths: 0","Greece &lt;br&gt;  &lt;br&gt; #Confirmed: 743 &lt;br&gt; #Deaths: 20","Guatemala &lt;br&gt;  &lt;br&gt; #Confirmed: 21 &lt;br&gt; #Deaths: 1","Guam &lt;br&gt;  &lt;br&gt; #Confirmed: 32 &lt;br&gt; #Deaths: 1","Guyana &lt;br&gt;  &lt;br&gt; #Confirmed: 5 &lt;br&gt; #Deaths: 1","Honduras &lt;br&gt;  &lt;br&gt; #Confirmed: 36 &lt;br&gt; #Deaths: 0","Croatia &lt;br&gt;  &lt;br&gt; #Confirmed: 382 &lt;br&gt; #Deaths: 1","Haiti &lt;br&gt;  &lt;br&gt; #Confirmed: 7 &lt;br&gt; #Deaths: 0","Hungary &lt;br&gt;  &lt;br&gt; #Confirmed: 226 &lt;br&gt; #Deaths: 10","Indonesia &lt;br&gt;  &lt;br&gt; #Confirmed: 686 &lt;br&gt; #Deaths: 55","Ireland &lt;br&gt;  &lt;br&gt; #Confirmed: 1329 &lt;br&gt; #Deaths: 7","Israel &lt;br&gt;  &lt;br&gt; #Confirmed: 1930 &lt;br&gt; #Deaths: 3","Isle of Man &lt;br&gt;  &lt;br&gt; #Confirmed: 23 &lt;br&gt; #Deaths: 0","India &lt;br&gt;  &lt;br&gt; #Confirmed: 562 &lt;br&gt; #Deaths: 9","Iraq &lt;br&gt;  &lt;br&gt; #Confirmed: 316 &lt;br&gt; #Deaths: 27","Iran &lt;br&gt;  &lt;br&gt; #Confirmed: 24811 &lt;br&gt; #Deaths: 1934","Iceland &lt;br&gt;  &lt;br&gt; #Confirmed: 648 &lt;br&gt; #Deaths: 2","Italy &lt;br&gt;  &lt;br&gt; #Confirmed: 69176 &lt;br&gt; #Deaths: 6820","Jersey &lt;br&gt;  &lt;br&gt; #Confirmed: 18 &lt;br&gt; #Deaths: 0","Jamaica &lt;br&gt;  &lt;br&gt; #Confirmed: 21 &lt;br&gt; #Deaths: 1","Jordan &lt;br&gt;  &lt;br&gt; #Confirmed: 127 &lt;br&gt; #Deaths: 0","Japan &lt;br&gt;  &lt;br&gt; #Confirmed: 1193 &lt;br&gt; #Deaths: 43","Kenya &lt;br&gt;  &lt;br&gt; #Confirmed: 25 &lt;br&gt; #Deaths: 0","Kyrgyzstan &lt;br&gt;  &lt;br&gt; #Confirmed: 42 &lt;br&gt; #Deaths: 0","Cambodia &lt;br&gt;  &lt;br&gt; #Confirmed: 91 &lt;br&gt; #Deaths: 0","South Korea &lt;br&gt;  &lt;br&gt; #Confirmed: 9137 &lt;br&gt; #Deaths: 126","Kuwait &lt;br&gt;  &lt;br&gt; #Confirmed: 191 &lt;br&gt; #Deaths: 0","Cayman Islands &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 1","Kazakhstan &lt;br&gt;  &lt;br&gt; #Confirmed: 79 &lt;br&gt; #Deaths: 0","Laos &lt;br&gt;  &lt;br&gt; #Confirmed: 2 &lt;br&gt; #Deaths: 0","Lebanon &lt;br&gt;  &lt;br&gt; #Confirmed: 304 &lt;br&gt; #Deaths: 4","Saint Lucia &lt;br&gt;  &lt;br&gt; #Confirmed: 2 &lt;br&gt; #Deaths: 0","Liechtenstein &lt;br&gt;  &lt;br&gt; #Confirmed: 47 &lt;br&gt; #Deaths: 0","Sri Lanka &lt;br&gt;  &lt;br&gt; #Confirmed: 102 &lt;br&gt; #Deaths: 0","Liberia &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 0","Lithuania &lt;br&gt;  &lt;br&gt; #Confirmed: 209 &lt;br&gt; #Deaths: 2","Luxembourg &lt;br&gt;  &lt;br&gt; #Confirmed: 1099 &lt;br&gt; #Deaths: 8","Latvia &lt;br&gt;  &lt;br&gt; #Confirmed: 197 &lt;br&gt; #Deaths: 0","Libya &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Morocco &lt;br&gt;  &lt;br&gt; #Confirmed: 170 &lt;br&gt; #Deaths: 5","Monaco &lt;br&gt;  &lt;br&gt; #Confirmed: 27 &lt;br&gt; #Deaths: 0","Moldova &lt;br&gt;  &lt;br&gt; #Confirmed: 125 &lt;br&gt; #Deaths: 1","Montenegro &lt;br&gt;  &lt;br&gt; #Confirmed: 47 &lt;br&gt; #Deaths: 0","Madagascar &lt;br&gt;  &lt;br&gt; #Confirmed: 19 &lt;br&gt; #Deaths: 0","Macedonia &lt;br&gt;  &lt;br&gt; #Confirmed: 148 &lt;br&gt; #Deaths: 2","Myanmar &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 0","Mongolia &lt;br&gt;  &lt;br&gt; #Confirmed: 10 &lt;br&gt; #Deaths: 0","Mauritania &lt;br&gt;  &lt;br&gt; #Confirmed: 2 &lt;br&gt; #Deaths: 0","Montserrat &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Malta &lt;br&gt;  &lt;br&gt; #Confirmed: 120 &lt;br&gt; #Deaths: 0","Mauritius &lt;br&gt;  &lt;br&gt; #Confirmed: 42 &lt;br&gt; #Deaths: 2","Maldives &lt;br&gt;  &lt;br&gt; #Confirmed: 13 &lt;br&gt; #Deaths: 0","Mexico &lt;br&gt;  &lt;br&gt; #Confirmed: 405 &lt;br&gt; #Deaths: 5","Malaysia &lt;br&gt;  &lt;br&gt; #Confirmed: 1624 &lt;br&gt; #Deaths: 15","Mozambique &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","New Caledonia &lt;br&gt;  &lt;br&gt; #Confirmed: 9 &lt;br&gt; #Deaths: 0","Niger &lt;br&gt;  &lt;br&gt; #Confirmed: 7 &lt;br&gt; #Deaths: 1","Nigeria &lt;br&gt;  &lt;br&gt; #Confirmed: 44 &lt;br&gt; #Deaths: 1","Nicaragua &lt;br&gt;  &lt;br&gt; #Confirmed: 2 &lt;br&gt; #Deaths: 0","Netherlands &lt;br&gt;  &lt;br&gt; #Confirmed: 5560 &lt;br&gt; #Deaths: 276","Norway &lt;br&gt;  &lt;br&gt; #Confirmed: 2566 &lt;br&gt; #Deaths: 10","Nepal &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 0","New Zealand &lt;br&gt;  &lt;br&gt; #Confirmed: 189 &lt;br&gt; #Deaths: 0","Oman &lt;br&gt;  &lt;br&gt; #Confirmed: 84 &lt;br&gt; #Deaths: 0","Panama &lt;br&gt;  &lt;br&gt; #Confirmed: 443 &lt;br&gt; #Deaths: 6","Peru &lt;br&gt;  &lt;br&gt; #Confirmed: 416 &lt;br&gt; #Deaths: 7","Papua New Guinea &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Philippines &lt;br&gt;  &lt;br&gt; #Confirmed: 552 &lt;br&gt; #Deaths: 35","Pakistan &lt;br&gt;  &lt;br&gt; #Confirmed: 991 &lt;br&gt; #Deaths: 7","Poland &lt;br&gt;  &lt;br&gt; #Confirmed: 901 &lt;br&gt; #Deaths: 10","Palestine &lt;br&gt;  &lt;br&gt; #Confirmed: 60 &lt;br&gt; #Deaths: 0","Portugal &lt;br&gt;  &lt;br&gt; #Confirmed: 2362 &lt;br&gt; #Deaths: 33","Paraguay &lt;br&gt;  &lt;br&gt; #Confirmed: 37 &lt;br&gt; #Deaths: 3","Qatar &lt;br&gt;  &lt;br&gt; #Confirmed: 526 &lt;br&gt; #Deaths: 0","Romania &lt;br&gt;  &lt;br&gt; #Confirmed: 762 &lt;br&gt; #Deaths: 11","Serbia &lt;br&gt;  &lt;br&gt; #Confirmed: 249 &lt;br&gt; #Deaths: 1","Russia &lt;br&gt;  &lt;br&gt; #Confirmed: 495 &lt;br&gt; #Deaths: 0","Rwanda &lt;br&gt;  &lt;br&gt; #Confirmed: 40 &lt;br&gt; #Deaths: 0","Saudi Arabia &lt;br&gt;  &lt;br&gt; #Confirmed: 767 &lt;br&gt; #Deaths: 1","Seychelles &lt;br&gt;  &lt;br&gt; #Confirmed: 7 &lt;br&gt; #Deaths: 0","Sudan &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 1","Sweden &lt;br&gt;  &lt;br&gt; #Confirmed: 2272 &lt;br&gt; #Deaths: 36","Singapore &lt;br&gt;  &lt;br&gt; #Confirmed: 558 &lt;br&gt; #Deaths: 2","Slovenia &lt;br&gt;  &lt;br&gt; #Confirmed: 480 &lt;br&gt; #Deaths: 3","Slovakia &lt;br&gt;  &lt;br&gt; #Confirmed: 204 &lt;br&gt; #Deaths: 0","San Marino &lt;br&gt;  &lt;br&gt; #Confirmed: 187 &lt;br&gt; #Deaths: 21","Senegal &lt;br&gt;  &lt;br&gt; #Confirmed: 86 &lt;br&gt; #Deaths: 0","Somalia &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Suriname &lt;br&gt;  &lt;br&gt; #Confirmed: 8 &lt;br&gt; #Deaths: 0","El Salvador &lt;br&gt;  &lt;br&gt; #Confirmed: 9 &lt;br&gt; #Deaths: 0","Syria &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Swaziland &lt;br&gt;  &lt;br&gt; #Confirmed: 4 &lt;br&gt; #Deaths: 0","Turks and Caicos Islands &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Chad &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 0","Togo &lt;br&gt;  &lt;br&gt; #Confirmed: 18 &lt;br&gt; #Deaths: 0","Thailand &lt;br&gt;  &lt;br&gt; #Confirmed: 934 &lt;br&gt; #Deaths: 4","East Timor &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Tunisia &lt;br&gt;  &lt;br&gt; #Confirmed: 114 &lt;br&gt; #Deaths: 3","Turkey &lt;br&gt;  &lt;br&gt; #Confirmed: 1872 &lt;br&gt; #Deaths: 44","Trinidad and Tobago &lt;br&gt;  &lt;br&gt; #Confirmed: 57 &lt;br&gt; #Deaths: 0","Taiwan &lt;br&gt;  &lt;br&gt; #Confirmed: 216 &lt;br&gt; #Deaths: 2","Tanzania &lt;br&gt;  &lt;br&gt; #Confirmed: 12 &lt;br&gt; #Deaths: 0","Ukraine &lt;br&gt;  &lt;br&gt; #Confirmed: 84 &lt;br&gt; #Deaths: 3","Uganda &lt;br&gt;  &lt;br&gt; #Confirmed: 9 &lt;br&gt; #Deaths: 0","United States of America &lt;br&gt;  &lt;br&gt; #Confirmed: 55231 &lt;br&gt; #Deaths: 801","Uruguay &lt;br&gt;  &lt;br&gt; #Confirmed: 189 &lt;br&gt; #Deaths: 0","Uzbekistan &lt;br&gt;  &lt;br&gt; #Confirmed: 55 &lt;br&gt; #Deaths: 0","Vatican City &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Saint Vincent and the Grenadines &lt;br&gt;  &lt;br&gt; #Confirmed: 1 &lt;br&gt; #Deaths: 0","Venezuela &lt;br&gt;  &lt;br&gt; #Confirmed: 91 &lt;br&gt; #Deaths: 0","United States Virgin Islands &lt;br&gt;  &lt;br&gt; #Confirmed: 17 &lt;br&gt; #Deaths: 0","Vietnam &lt;br&gt;  &lt;br&gt; #Confirmed: 134 &lt;br&gt; #Deaths: 0","Kosovo &lt;br&gt;  &lt;br&gt; #Confirmed: 63 &lt;br&gt; #Deaths: 1","South Africa &lt;br&gt;  &lt;br&gt; #Confirmed: 557 &lt;br&gt; #Deaths: 0","Zambia &lt;br&gt;  &lt;br&gt; #Confirmed: 3 &lt;br&gt; #Deaths: 0","Zimbabwe &lt;br&gt;  &lt;br&gt; #Confirmed: 2 &lt;br&gt; #Deaths: 1"],["country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country","country"]],"container":"<table class=\"display fill-container\">\n  <thead>\n    <tr>\n      <th>Date<\/th>\n      <th>CountryCode<\/th>\n      <th>CountryName<\/th>\n      <th>RegionCode<\/th>\n      <th>RegionName<\/th>\n      <th>Confirmed<\/th>\n      <th>Deaths<\/th>\n      <th>Latitude<\/th>\n      <th>Longitude<\/th>\n      <th>Population<\/th>\n      <th>icon_group<\/th>\n      <th>label<\/th>\n      <th>DataLevel<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[5,6,7,8,9]}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row"}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="column-1" class="section level2" data-width="650">
+<h2>Column</h2>
+<div id="chart-a" class="section level3">
+<h3>Chart A</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-1c0ad60036d6a6ff5fa3" style="width:576px;height:460.8px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1c0ad60036d6a6ff5fa3">{"x":{"options":{"minZoom":2,"maxZoom":8,"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"fullscreenControl":{"position":"topleft","pseudoFullscreen":false}},"calls":[{"method":"addSelect","args":["SharedData8c53e584"]},{"method":"addTiles","args":["//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",null,null,{"errorTileUrl":"","noWrap":true,"detectRetina":false,"attribution":"Maps by <a href=\"http://www.mapbox.com/\">Mapbox<\/a>"}]},{"method":"addAwesomeMarkers","args":[[42.546245,23.424076,33.93911,17.060816,41.153332,40.069099,12.226079,-11.202692,-38.416097,47.516231,-25.274398,40.143105,43.915886,13.193887,23.684994,50.503887,12.238333,42.733883,25.930414,9.30769,32.321384,4.535277,-16.290154,-14.235004,25.03428,27.514162,53.709807,17.189877,56.130366,-4.038333,6.611111,-0.228021,46.818188,7.539989,-35.675147,7.369722,35.86166,4.570868,9.748917,21.521757,16.002082,35.126413,49.817492,51.165691,11.825138,56.26392,15.414999,18.735693,28.033886,-1.831239,58.595272,26.820553,15.179384,40.463667,9.145,61.92411,-16.578193,61.892635,46.227638,-0.803689,55.378051,12.262776,42.315407,49.465691,7.946527,36.137741,71.706936,13.443182,9.945587,1.650801,39.074208,15.783471,13.444304,4.860416,15.199999,45.1,18.971187,47.162494,-0.789275,53.41291,31.046051,54.236107,20.593684,33.223191,32.427908,64.963051,41.87194,49.214439,18.109581,30.585164,36.204824,-0.023559,41.20438,12.565679,35.907757,29.31166,19.513469,48.019573,19.85627,33.854721,13.909444,47.166,7.873054,6.428055,55.169438,49.815273,56.879635,26.3351,31.791702,43.750298,47.411631,42.708678,-18.766947,41.608635,21.913965,46.862496,21.00789,16.742498,35.937496,-20.348404,3.202778,23.634501,4.210484,-18.665695,-20.904305,17.607789,9.081999,12.865416,52.132633,60.472024,28.394857,-40.900557,21.512583,8.537981,-9.189967,-6.314993,12.879721,30.375321,51.919438,31.952162,39.399872,-23.442503,25.354826,45.943161,44.016521,61.52401,-1.940278,23.885942,-4.679574,12.862807,60.128161,1.352083,46.151241,48.669026,43.94236,14.497401,5.152149,3.919305,13.794185,34.802075,-26.522503,21.694025,15.454166,8.619543,15.870032,-8.874217,33.886917,38.963745,10.691803,23.69781,-6.369028,48.379433,1.373333,37.09024,-32.522779,41.377491,41.902916,12.984305,6.42375,18.335765,14.058324,42.602636,-30.559482,-13.133897,-19.015438],[1.601554,53.847818,67.709953,-61.796428,20.168331,45.038189,-69.060087,17.873887,-63.616672,14.550072,133.775136,47.576927,17.679076,-59.543198,90.356331,4.469936,-1.561593,25.48583,50.637772,2.315834,-64.75737,114.727669,-63.588653,-51.92528,-77.39628,90.433601,27.953389,-88.49765,-106.346771,21.758664,20.939444,15.827659,8.227512,-5.54708,-71.542969,12.354722,104.195397,-74.297333,-83.753428,-77.781167,-24.013197,33.429859,15.472962,10.451526,42.590275,9.501785,-61.370976,-70.162651,1.659626,-78.183406,25.013607,30.802498,39.782334,-3.74922,40.489673,25.748151,179.414413,-6.911806,2.213749,11.609444,-3.435973,-61.604171,43.356892,-2.585278,-1.023194,-5.345374,-42.604303,-15.310139,-9.696645,10.267895,21.824312,-90.230759,144.793731,-58.93018,-86.241905,15.2,-72.285215,19.503304,113.921327,-8.24389,34.851612,-4.548056,78.96288,43.679291,53.688046,-19.020835,12.56738,-2.13125,-77.297508,36.238414,138.252924,37.906193,74.766098,104.990963,127.766922,47.481766,-80.566956,66.923684,102.495496,35.862285,-60.978893,9.555373,80.771797,-9.429499,23.881275,6.129583,24.603189,17.228331,-7.09262,7.412841,28.369885,19.37439,46.869107,21.745275,95.956223,103.846656,-10.940835,-62.187366,14.375416,57.552152,73.22068,-102.552784,101.975766,35.529562,165.618042,8.081666,8.675277,-85.207229,5.291266,8.468946,84.124008,174.885971,55.923255,-80.782127,-75.015152,143.95555,121.774017,69.345116,19.145136,35.233154,-8.224454,-58.443832,51.183884,24.96676,21.005859,105.318756,29.873888,45.079162,55.491977,30.217636,18.643501,103.819836,14.995463,19.699024,12.457777,-14.452362,46.199616,-56.027783,-88.89653,38.996815,31.465866,-71.797928,18.732207,0.824782,100.992541,125.727539,9.537499,35.243322,-61.222503,120.960515,34.888822,31.16558,32.290275,-95.712891,-55.765835,64.585262,12.453389,-61.287228,-66.58973,-64.896335,108.277199,20.902977,22.937506,27.849332,29.154857],{"icon":"stats","markerColor":["red","red","orange","lightblue","red","red","orange","lightblue","red","black","black","orange","red","orange","orange","black","orange","red","red","lightblue","lightblue","red","orange","black","lightblue","lightblue","orange","lightblue","black","orange","lightblue","lightblue","black","orange","red","orange","black","red","red","orange","lightblue","red","black","black","lightblue","black","lightblue","red","red","black","red","red","lightblue","black","orange","red","lightblue","red","black","lightblue","black","lightblue","orange","orange","orange","orange","lightblue","lightblue","lightblue","lightblue","red","orange","orange","lightblue","orange","red","lightblue","red","red","black","black","orange","red","red","black","red","black","orange","orange","red","black","orange","orange","orange","black","red","lightblue","orange","lightblue","red","lightblue","orange","red","lightblue","red","black","red","lightblue","red","orange","red","orange","orange","red","lightblue","lightblue","lightblue","lightblue","red","orange","orange","red","black","lightblue","lightblue","lightblue","orange","lightblue","black","black","lightblue","red","orange","red","red","lightblue","red","red","red","orange","black","orange","red","red","red","red","orange","red","lightblue","lightblue","black","red","red","red","red","orange","lightblue","lightblue","lightblue","lightblue","lightblue","lightblue","lightblue","orange","red","lightblue","red","black","orange","red","orange","orange","lightblue","black","red","orange","lightblue","lightblue","orange","orange","red","orange","red","lightblue","lightblue"],"iconColor":["white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","darkred","white","white","white","white","white","white","darkred","white","white","white","white","white","white","white","white","white","darkred","white","white","white","white","darkred","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","darkred","white","darkred","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","white","darkred","white","white","white","white","white","white","white","white","white","white","white"],"spin":false,"squareMarker":false,"iconRotate":0,"prefix":"glyphicon"},null,"covid-19",{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},null,null,null,null,["Andorra <br>  <br> #Confirmed: 164 <br> #Deaths: 0","United Arab Emirates <br>  <br> #Confirmed: 248 <br> #Deaths: 2","Afghanistan <br>  <br> #Confirmed: 42 <br> #Deaths: 1","Antigua and Barbuda <br>  <br> #Confirmed: 3 <br> #Deaths: 0","Albania <br>  <br> #Confirmed: 123 <br> #Deaths: 5","Armenia <br>  <br> #Confirmed: 265 <br> #Deaths: 0","Netherlands Antilles <br>  <br> #Confirmed: 22 <br> #Deaths: 0","Angola <br>  <br> #Confirmed: 2 <br> #Deaths: 0","Argentina <br>  <br> #Confirmed: 387 <br> #Deaths: 6","Austria <br>  <br> #Confirmed: 5282 <br> #Deaths: 30","Australia <br>  <br> #Confirmed: 2423 <br> #Deaths: 8","Azerbaijan <br>  <br> #Confirmed: 87 <br> #Deaths: 1","Bosnia and Herzegovina <br>  <br> #Confirmed: 162 <br> #Deaths: 2","Barbados <br>  <br> #Confirmed: 18 <br> #Deaths: 0","Bangladesh <br>  <br> #Confirmed: 39 <br> #Deaths: 4","Belgium <br>  <br> #Confirmed: 4269 <br> #Deaths: 122","Burkina Faso <br>  <br> #Confirmed: 99 <br> #Deaths: 3","Bulgaria <br>  <br> #Confirmed: 220 <br> #Deaths: 3","Bahrain <br>  <br> #Confirmed: 390 <br> #Deaths: 3","Benin <br>  <br> #Confirmed: 5 <br> #Deaths: 0","Bermuda <br>  <br> #Confirmed: 6 <br> #Deaths: 0","Brunei <br>  <br> #Confirmed: 104 <br> #Deaths: 0","Bolivia <br>  <br> #Confirmed: 32 <br> #Deaths: 0","Brazil <br>  <br> #Confirmed: 2201 <br> #Deaths: 46","Bahamas <br>  <br> #Confirmed: 4 <br> #Deaths: 0","Bhutan <br>  <br> #Confirmed: 2 <br> #Deaths: 0","Belarus <br>  <br> #Confirmed: 81 <br> #Deaths: 0","Belize <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Canada <br>  <br> #Confirmed: 1959 <br> #Deaths: 27","Democratic Republic of the Congo <br>  <br> #Confirmed: 45 <br> #Deaths: 3","Central African Republic <br>  <br> #Confirmed: 4 <br> #Deaths: 0","Republic of the Congo <br>  <br> #Confirmed: 4 <br> #Deaths: 0","Switzerland <br>  <br> #Confirmed: 8789 <br> #Deaths: 86","Ivory Coast <br>  <br> #Confirmed: 73 <br> #Deaths: 0","Chile <br>  <br> #Confirmed: 922 <br> #Deaths: 2","Cameroon <br>  <br> #Confirmed: 72 <br> #Deaths: 1","China <br>  <br> #Confirmed: 81847 <br> #Deaths: 3287","Colombia <br>  <br> #Confirmed: 235 <br> #Deaths: 3","Costa Rica <br>  <br> #Confirmed: 177 <br> #Deaths: 2","Cuba <br>  <br> #Confirmed: 48 <br> #Deaths: 1","Cape Verde <br>  <br> #Confirmed: 3 <br> #Deaths: 1","Cyprus <br>  <br> #Confirmed: 124 <br> #Deaths: 3","Czech Republic <br>  <br> #Confirmed: 1394 <br> #Deaths: 3","Germany <br>  <br> #Confirmed: 31554 <br> #Deaths: 149","Djibouti <br>  <br> #Confirmed: 3 <br> #Deaths: 0","Denmark <br>  <br> #Confirmed: 1591 <br> #Deaths: 32","Dominica <br>  <br> #Confirmed: 2 <br> #Deaths: 0","Dominican Republic <br>  <br> #Confirmed: 312 <br> #Deaths: 6","Algeria <br>  <br> #Confirmed: 231 <br> #Deaths: 17","Ecuador <br>  <br> #Confirmed: 1082 <br> #Deaths: 27","Estonia <br>  <br> #Confirmed: 369 <br> #Deaths: 0","Egypt <br>  <br> #Confirmed: 366 <br> #Deaths: 19","Eritrea <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Spain <br>  <br> #Confirmed: 39673 <br> #Deaths: 2696","Ethiopia <br>  <br> #Confirmed: 11 <br> #Deaths: 0","Finland <br>  <br> #Confirmed: 792 <br> #Deaths: 1","Fiji <br>  <br> #Confirmed: 5 <br> #Deaths: 0","Faroe Islands <br>  <br> #Confirmed: 122 <br> #Deaths: 0","France <br>  <br> #Confirmed: 22302 <br> #Deaths: 1100","Gabon <br>  <br> #Confirmed: 6 <br> #Deaths: 1","United Kingdom <br>  <br> #Confirmed: 8077 <br> #Deaths: 422","Grenada <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Georgia <br>  <br> #Confirmed: 70 <br> #Deaths: 0","Guernsey <br>  <br> #Confirmed: 23 <br> #Deaths: 0","Ghana <br>  <br> #Confirmed: 53 <br> #Deaths: 2","Gibraltar <br>  <br> #Confirmed: 15 <br> #Deaths: 0","Greenland <br>  <br> #Confirmed: 4 <br> #Deaths: 0","Gambia <br>  <br> #Confirmed: 3 <br> #Deaths: 1","Guinea <br>  <br> #Confirmed: 4 <br> #Deaths: 0","Equatorial Guinea <br>  <br> #Confirmed: 9 <br> #Deaths: 0","Greece <br>  <br> #Confirmed: 743 <br> #Deaths: 20","Guatemala <br>  <br> #Confirmed: 21 <br> #Deaths: 1","Guam <br>  <br> #Confirmed: 32 <br> #Deaths: 1","Guyana <br>  <br> #Confirmed: 5 <br> #Deaths: 1","Honduras <br>  <br> #Confirmed: 36 <br> #Deaths: 0","Croatia <br>  <br> #Confirmed: 382 <br> #Deaths: 1","Haiti <br>  <br> #Confirmed: 7 <br> #Deaths: 0","Hungary <br>  <br> #Confirmed: 226 <br> #Deaths: 10","Indonesia <br>  <br> #Confirmed: 686 <br> #Deaths: 55","Ireland <br>  <br> #Confirmed: 1329 <br> #Deaths: 7","Israel <br>  <br> #Confirmed: 1930 <br> #Deaths: 3","Isle of Man <br>  <br> #Confirmed: 23 <br> #Deaths: 0","India <br>  <br> #Confirmed: 562 <br> #Deaths: 9","Iraq <br>  <br> #Confirmed: 316 <br> #Deaths: 27","Iran <br>  <br> #Confirmed: 24811 <br> #Deaths: 1934","Iceland <br>  <br> #Confirmed: 648 <br> #Deaths: 2","Italy <br>  <br> #Confirmed: 69176 <br> #Deaths: 6820","Jersey <br>  <br> #Confirmed: 18 <br> #Deaths: 0","Jamaica <br>  <br> #Confirmed: 21 <br> #Deaths: 1","Jordan <br>  <br> #Confirmed: 127 <br> #Deaths: 0","Japan <br>  <br> #Confirmed: 1193 <br> #Deaths: 43","Kenya <br>  <br> #Confirmed: 25 <br> #Deaths: 0","Kyrgyzstan <br>  <br> #Confirmed: 42 <br> #Deaths: 0","Cambodia <br>  <br> #Confirmed: 91 <br> #Deaths: 0","South Korea <br>  <br> #Confirmed: 9137 <br> #Deaths: 126","Kuwait <br>  <br> #Confirmed: 191 <br> #Deaths: 0","Cayman Islands <br>  <br> #Confirmed: 3 <br> #Deaths: 1","Kazakhstan <br>  <br> #Confirmed: 79 <br> #Deaths: 0","Laos <br>  <br> #Confirmed: 2 <br> #Deaths: 0","Lebanon <br>  <br> #Confirmed: 304 <br> #Deaths: 4","Saint Lucia <br>  <br> #Confirmed: 2 <br> #Deaths: 0","Liechtenstein <br>  <br> #Confirmed: 47 <br> #Deaths: 0","Sri Lanka <br>  <br> #Confirmed: 102 <br> #Deaths: 0","Liberia <br>  <br> #Confirmed: 3 <br> #Deaths: 0","Lithuania <br>  <br> #Confirmed: 209 <br> #Deaths: 2","Luxembourg <br>  <br> #Confirmed: 1099 <br> #Deaths: 8","Latvia <br>  <br> #Confirmed: 197 <br> #Deaths: 0","Libya <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Morocco <br>  <br> #Confirmed: 170 <br> #Deaths: 5","Monaco <br>  <br> #Confirmed: 27 <br> #Deaths: 0","Moldova <br>  <br> #Confirmed: 125 <br> #Deaths: 1","Montenegro <br>  <br> #Confirmed: 47 <br> #Deaths: 0","Madagascar <br>  <br> #Confirmed: 19 <br> #Deaths: 0","Macedonia <br>  <br> #Confirmed: 148 <br> #Deaths: 2","Myanmar <br>  <br> #Confirmed: 3 <br> #Deaths: 0","Mongolia <br>  <br> #Confirmed: 10 <br> #Deaths: 0","Mauritania <br>  <br> #Confirmed: 2 <br> #Deaths: 0","Montserrat <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Malta <br>  <br> #Confirmed: 120 <br> #Deaths: 0","Mauritius <br>  <br> #Confirmed: 42 <br> #Deaths: 2","Maldives <br>  <br> #Confirmed: 13 <br> #Deaths: 0","Mexico <br>  <br> #Confirmed: 405 <br> #Deaths: 5","Malaysia <br>  <br> #Confirmed: 1624 <br> #Deaths: 15","Mozambique <br>  <br> #Confirmed: 1 <br> #Deaths: 0","New Caledonia <br>  <br> #Confirmed: 9 <br> #Deaths: 0","Niger <br>  <br> #Confirmed: 7 <br> #Deaths: 1","Nigeria <br>  <br> #Confirmed: 44 <br> #Deaths: 1","Nicaragua <br>  <br> #Confirmed: 2 <br> #Deaths: 0","Netherlands <br>  <br> #Confirmed: 5560 <br> #Deaths: 276","Norway <br>  <br> #Confirmed: 2566 <br> #Deaths: 10","Nepal <br>  <br> #Confirmed: 3 <br> #Deaths: 0","New Zealand <br>  <br> #Confirmed: 189 <br> #Deaths: 0","Oman <br>  <br> #Confirmed: 84 <br> #Deaths: 0","Panama <br>  <br> #Confirmed: 443 <br> #Deaths: 6","Peru <br>  <br> #Confirmed: 416 <br> #Deaths: 7","Papua New Guinea <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Philippines <br>  <br> #Confirmed: 552 <br> #Deaths: 35","Pakistan <br>  <br> #Confirmed: 991 <br> #Deaths: 7","Poland <br>  <br> #Confirmed: 901 <br> #Deaths: 10","Palestine <br>  <br> #Confirmed: 60 <br> #Deaths: 0","Portugal <br>  <br> #Confirmed: 2362 <br> #Deaths: 33","Paraguay <br>  <br> #Confirmed: 37 <br> #Deaths: 3","Qatar <br>  <br> #Confirmed: 526 <br> #Deaths: 0","Romania <br>  <br> #Confirmed: 762 <br> #Deaths: 11","Serbia <br>  <br> #Confirmed: 249 <br> #Deaths: 1","Russia <br>  <br> #Confirmed: 495 <br> #Deaths: 0","Rwanda <br>  <br> #Confirmed: 40 <br> #Deaths: 0","Saudi Arabia <br>  <br> #Confirmed: 767 <br> #Deaths: 1","Seychelles <br>  <br> #Confirmed: 7 <br> #Deaths: 0","Sudan <br>  <br> #Confirmed: 3 <br> #Deaths: 1","Sweden <br>  <br> #Confirmed: 2272 <br> #Deaths: 36","Singapore <br>  <br> #Confirmed: 558 <br> #Deaths: 2","Slovenia <br>  <br> #Confirmed: 480 <br> #Deaths: 3","Slovakia <br>  <br> #Confirmed: 204 <br> #Deaths: 0","San Marino <br>  <br> #Confirmed: 187 <br> #Deaths: 21","Senegal <br>  <br> #Confirmed: 86 <br> #Deaths: 0","Somalia <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Suriname <br>  <br> #Confirmed: 8 <br> #Deaths: 0","El Salvador <br>  <br> #Confirmed: 9 <br> #Deaths: 0","Syria <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Swaziland <br>  <br> #Confirmed: 4 <br> #Deaths: 0","Turks and Caicos Islands <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Chad <br>  <br> #Confirmed: 3 <br> #Deaths: 0","Togo <br>  <br> #Confirmed: 18 <br> #Deaths: 0","Thailand <br>  <br> #Confirmed: 934 <br> #Deaths: 4","East Timor <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Tunisia <br>  <br> #Confirmed: 114 <br> #Deaths: 3","Turkey <br>  <br> #Confirmed: 1872 <br> #Deaths: 44","Trinidad and Tobago <br>  <br> #Confirmed: 57 <br> #Deaths: 0","Taiwan <br>  <br> #Confirmed: 216 <br> #Deaths: 2","Tanzania <br>  <br> #Confirmed: 12 <br> #Deaths: 0","Ukraine <br>  <br> #Confirmed: 84 <br> #Deaths: 3","Uganda <br>  <br> #Confirmed: 9 <br> #Deaths: 0","United States of America <br>  <br> #Confirmed: 55231 <br> #Deaths: 801","Uruguay <br>  <br> #Confirmed: 189 <br> #Deaths: 0","Uzbekistan <br>  <br> #Confirmed: 55 <br> #Deaths: 0","Vatican City <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Saint Vincent and the Grenadines <br>  <br> #Confirmed: 1 <br> #Deaths: 0","Venezuela <br>  <br> #Confirmed: 91 <br> #Deaths: 0","United States Virgin Islands <br>  <br> #Confirmed: 17 <br> #Deaths: 0","Vietnam <br>  <br> #Confirmed: 134 <br> #Deaths: 0","Kosovo <br>  <br> #Confirmed: 63 <br> #Deaths: 1","South Africa <br>  <br> #Confirmed: 557 <br> #Deaths: 0","Zambia <br>  <br> #Confirmed: 3 <br> #Deaths: 0","Zimbabwe <br>  <br> #Confirmed: 2 <br> #Deaths: 1"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},{"ctKey":["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185"],"ctGroup":"SharedData8c53e584"}]},{"method":"addControl","args":["<div style='padding: 10px; padding-bottom: 10px;'><h4 style='padding-top:0; padding-bottom:10px; margin: 0;'> #Current <\/h4><div style='width: auto; height: 45px'><div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-lightblue'><i style='margin-left: 4px; margin-top: 11px; color: white' class= 'glyphicon glyphicon-stats'><\/i><\/div><p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >1-10<\/p><\/div><div style='width: auto; height: 45px'><div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-orange'><i style='margin-left: 4px; margin-top: 11px; color: white' class= 'glyphicon glyphicon-stats'><\/i><\/div><p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >11-100<\/p><\/div><div style='width: auto; height: 45px'><div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-red'><i style='margin-left: 4px; margin-top: 11px; color: white' class= 'glyphicon glyphicon-stats'><\/i><\/div><p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >101-1000<\/p><\/div><div style='width: auto; height: 45px'><div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-black'><i style='margin-left: 4px; margin-top: 11px; color: white' class= 'glyphicon glyphicon-stats'><\/i><\/div><p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >1001-10000<\/p><\/div><div style='width: auto; height: 45px'><div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-black'><i style='margin-left: 4px; margin-top: 11px; color: darkred' class= 'glyphicon glyphicon-stats'><\/i><\/div><p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >10000-<\/p><\/div><\/div>","bottomright",null,"info legend"]},{"method":"addHomeButton","args":[-130,-50,130,50,"Zoom to Home","<strong> Home <\/strong>","topleft"]},{"method":"setMaxBounds","args":[-90,-200,90,200]}],"limits":{"lat":[-40.900557,71.706936],"lng":[-106.346771,179.414413]},"setView":[[40,0],4,[]]},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+
+$(document).ready(function () {
+
+  // add bootstrap table styles to pandoc tables
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+
+  // initialize mathjax
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+  document.getElementsByTagName("head")[0].appendChild(script);
+
+});
+</script>
+
+<div id="flexdashboard-source-code">
+<pre class="line-numbers"><code class="language-r">---
+title: "COVID-19 Dashboard"
+author: "Jingyu Bao"
+output:
+  flexdashboard::flex_dashboard:
+    theme: paper
+    # favicon: ./static/favicon.ico
+    source_code: embed
+    self_contained: FALSE
+---
+
+```{r setup, include=FALSE}
+# devtools::install_github("kent37/summarywidget")
+# devtools::install_github("rstudio/crosstalk")
+library(flexdashboard)
+library(crosstalk)
+library(summarywidget)
+library(data.table)
+library(mapview)
+library(leaflet)
+library(dplyr)
+library(ggplot2)
+
+library(leafpop)
+library(sf)
+library(htmltools)
+library(leafem)
+library(leaflet.extras)
+library(raster)
+library(plotly)
+
+computeArticles = function(...) return(45)
+computeComments = function(...) return(126)
+computeSpam = function(...) return(15)
+```
+
+```{r html-plot-supplement, include=FALSE}
+# Ref: https://stackoverflow.com/questions/47064921/leaflet-legend-for-addawesomemarkers-function-with-icons
+markerLegendHTML <- function(IconSet) {
+    # container div:
+    legendHtml <- "<div style='padding: 10px; padding-bottom: 10px;'><h4 style='padding-top:0; padding-bottom:10px; margin: 0;'> #Current </h4>"
+    
+    n <- 1
+    # add each icon for font-awesome icons icons:
+    for (Icon in IconSet) {
+        if (Icon[["library"]] == "glyphicon") {
+            legendHtml<- paste0(
+                legendHtml, 
+                "<div style='width: auto; height: 45px'>",
+                "<div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-",
+                Icon[["markerColor"]],
+                "'>",
+                "<i style='margin-left: 4px; margin-top: 11px; color: ",
+                Icon[["iconColor"]],
+                "' class= 'glyphicon glyphicon-",
+                Icon[["icon"]],
+                "'></i>",
+                "</div>",
+                "<p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >", 
+                names(IconSet)[n] ,
+                "</p>",
+                "</div>")    
+        }
+        n<- n + 1
+    }
+    paste0(legendHtml, "</div>")
+}
+
+popup_icons <- awesomeIconList(
+    '1-10' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'lightblue'),
+    '11-100' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'orange'),
+    '101-1000' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'red'),
+    '1001-10000' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'black'),
+    '10000-' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'black', iconColor = 'darkred')
+)
+```
+
+
+```{r load-data}
+data <- fread('https://open-covid-19.github.io/data/data.csv')
+# ignore 0 confirmed country/region
+data[, `:=`(
+    Date=as.Date(Date),
+    icon_group=cut(
+        data$Confirmed, 
+        breaks=c(-1, 10, 100, 1000, 10000, 1000000), 
+        labels=c('1-10', '11-100', '101-1000', '1001-10000', '10000-')),
+    label=paste0(
+        CountryName, 
+        ' <br> ', RegionName,
+        ' <br> #Confirmed: ', Confirmed,
+        ' <br> #Deaths: ', Deaths
+    )
+)]
+
+# split it to country and region data
+data[RegionCode=='', 'DataLevel':='country']
+data[RegionCode!='', 'DataLevel':='region']
+
+data <- data[Confirmed!=0 & Date == '2020-03-25' & DataLevel=='country']
+
+sh_data <- SharedData$new(data)
+```
+
+Dashboard {data-icon="ion-stats-bars"}
+=====================================  
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r filters}
+filter_select(
+  id = 'country',
+  label = 'Country',
+  sharedData = sh_data,
+  group = ~CountryName
+)
+
+filter_select(
+  id = 'date',
+  label = 'Date',
+  sharedData = sh_data,
+  group = ~Date,
+  multiple = FALSE
+)
+```
+
+### Chart D
+
+```{r}
+total_confirmed <- summarywidget(
+  sh_data, 
+  statistic='sum', 
+  column='Confirmed',
+  selection=~DataLevel=='country',
+  digits=0)
+# valueBox(sum(total_confirmed$x$data), icon = "fa-pencil")
+p(class="value", total_confirmed, span(class="caption", "Variances"))
+```
+
+### Chart B
+
+```{r}
+sh_data %>%
+  DT::datatable(
+      width = 800,
+      height = 400,
+      rownames = FALSE,
+      options = list(pageLength=10)
+  )
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+# Create the map
+sh_data %>%
+    leaflet(options = leafletOptions(minZoom = 2, maxZoom = 8)) %>%
+    addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>',
+        options = providerTileOptions(noWrap = TRUE)
+    ) %>%
+    addAwesomeMarkers(
+        ~Longitude,
+        ~Latitude,
+        group = "covid-19",
+        label = ~lapply(label, htmltools::HTML),
+        icon = ~popup_icons[icon_group]
+    ) %>%
+    # addPopupGraphs(popup_plots, group = 'covid-19', width = 300, height = 300) %>%
+    addFullscreenControl(position = "topleft") %>%
+    addControl(html = markerLegendHTML(popup_icons), position = "bottomright") %>%
+    leafem::addHomeButton(extent(c(-130, 130, -50, 50)), 'Home', position = 'topleft') %>%
+    setView(lng = 0, lat = 40, zoom = 4) %>%
+    setMaxBounds(lng1 = -200, lat1 = -90, lng2 = 200, lat2 = 90)
+```
+
+
+
+
+
+</code></pre>
+</div>
+<script type="text/javascript">
+$(document).ready(function () {
+  FlexDashboard.init({
+    theme: "paper",
+    fillPage: true,
+    orientation: "columns",
+    storyboard: false,
+    defaultFigWidth: 576,
+    defaultFigHeight: 460,
+    defaultFigWidthMobile: 360,
+    defaultFigHeightMobile: 460
+  });
+});
+</script>
+
+</body>
+</html>

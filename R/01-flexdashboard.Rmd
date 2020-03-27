@@ -1,0 +1,151 @@
+---
+title: "COVID-19 Dashboard"
+author: "Jingyu Bao"
+output:
+  flexdashboard::flex_dashboard:
+    theme: paper
+    # favicon: ./static/favicon.ico
+    source_code: embed
+    self_contained: FALSE
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(data.table)
+library(mapview)
+library(leaflet)
+library(dplyr)
+library(ggplot2)
+library(shiny)
+```
+
+```{r html-plot-supplement, include=FALSE}
+# Ref: https://stackoverflow.com/questions/47064921/leaflet-legend-for-addawesomemarkers-function-with-icons
+markerLegendHTML <- function(IconSet) {
+    # container div:
+    legendHtml <- "<div style='padding: 10px; padding-bottom: 10px;'><h4 style='padding-top:0; padding-bottom:10px; margin: 0;'> Confirmed </h4>"
+    
+    n <- 1
+    # add each icon for font-awesome icons icons:
+    for (Icon in IconSet) {
+        if (Icon[["library"]] == "glyphicon") {
+            legendHtml<- paste0(
+                legendHtml, 
+                "<div style='width: auto; height: 45px'>",
+                "<div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-",
+                Icon[["markerColor"]],
+                "'>",
+                "<i style='margin-left: 4px; margin-top: 11px; color: ",
+                Icon[["iconColor"]],
+                "' class= 'glyphicon glyphicon-",
+                Icon[["icon"]],
+                "'></i>",
+                "</div>",
+                "<p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >", 
+                names(IconSet)[n] ,
+                "</p>",
+                "</div>")    
+        }
+        n<- n + 1
+    }
+    paste0(legendHtml, "</div>")
+}
+
+popup_icons <- awesomeIconList(
+    '1-10' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'lightblue'),
+    '11-100' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'orange'),
+    '101-1000' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'red'),
+    '1001-10000' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'black'),
+    '10000-' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'black', iconColor = 'darkred')
+)
+```
+
+
+```{r load-data}
+data <- fread('https://open-covid-19.github.io/data/data.csv')
+# ignore 0 confirmed country/region
+data[, `:=`(
+    Date=as.Date(Date),
+    icon_group=cut(
+        data$Confirmed, 
+        breaks=c(-1, 10, 100, 1000, 10000, 1000000), 
+        labels=c('1-10', '11-100', '101-1000', '1001-10000', '10000-')),
+    label=paste0(
+        CountryName, 
+        ' <br> ', RegionName,
+        ' <br> #Confirmed: ', Confirmed,
+        ' <br> #Deaths: ', Deaths
+    )
+)]
+
+# split it to country and region data
+data[RegionCode=='', 'DataLevel':='country']
+data[RegionCode!='', 'DataLevel':='region']
+
+data <- data[Confirmed!=0 & DataLevel=='country' & Date=='2020-03-15']
+```
+
+Dashboard {data-icon="ion-stats-bars"}
+=====================================  
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r filters}
+selectInput("n_breaks", label = "Number of bins:",
+            choices = c(10, 20, 35, 50), selected = 20)
+```
+
+### Chart D
+
+```{r}
+valueBox(sum(data$Confirmed), icon = "fa-pencil")
+```
+
+### Chart B
+
+```{r}
+data %>%
+  DT::datatable(
+      width = 800,
+      height = 400,
+      rownames = FALSE,
+      options = list(pageLength=10)
+  )
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+data %>%
+    leaflet(options = leafletOptions(minZoom = 2, maxZoom = 8)) %>%
+    addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>',
+        options = providerTileOptions(noWrap = TRUE)
+    ) %>%
+    addAwesomeMarkers(
+        ~Longitude,
+        ~Latitude,
+        group = "covid-19",
+        label = ~lapply(label, htmltools::HTML),
+        icon = ~popup_icons[icon_group]
+    ) %>%
+    # addPopupGraphs(popup_plots, group = 'covid-19', width = 300, height = 300) %>%
+    leaflet.extras::addFullscreenControl(position = "topleft") %>%
+    addControl(html = markerLegendHTML(popup_icons), position = "bottomright") %>%
+    leafem::addHomeButton(raster::extent(c(-130, 130, -50, 50)), 'Home', position = 'topleft') %>%
+    setView(lng = 0, lat = 40, zoom = 4) %>%
+    setMaxBounds(lng1 = -200, lat1 = -90, lng2 = 200, lat2 = 90)
+```
+
+
+
+
+
