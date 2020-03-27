@@ -20,6 +20,8 @@ library(ggplot2)
 library(shiny)
 ```
 
+
+
 ```{r html-plot-supplement, include=FALSE}
 # Ref: https://stackoverflow.com/questions/47064921/leaflet-legend-for-addawesomemarkers-function-with-icons
 markerLegendHTML <- function(IconSet) {
