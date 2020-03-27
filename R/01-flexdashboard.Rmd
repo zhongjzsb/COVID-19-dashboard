@@ -11,6 +11,7 @@ runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
+
 library(flexdashboard)
 library(data.table)
 library(mapview)
@@ -27,13 +28,13 @@ library(shiny)
 markerLegendHTML <- function(IconSet) {
     # container div:
     legendHtml <- "<div style='padding: 10px; padding-bottom: 10px;'><h4 style='padding-top:0; padding-bottom:10px; margin: 0;'> Confirmed </h4>"
-    
+
     n <- 1
     # add each icon for font-awesome icons icons:
     for (Icon in IconSet) {
         if (Icon[["library"]] == "glyphicon") {
             legendHtml<- paste0(
-                legendHtml, 
+                legendHtml,
                 "<div style='width: auto; height: 45px'>",
                 "<div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-",
                 Icon[["markerColor"]],
@@ -44,10 +45,10 @@ markerLegendHTML <- function(IconSet) {
                 Icon[["icon"]],
                 "'></i>",
                 "</div>",
-                "<p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >", 
+                "<p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >",
                 names(IconSet)[n] ,
                 "</p>",
-                "</div>")    
+                "</div>")
         }
         n<- n + 1
     }
@@ -70,11 +71,11 @@ data <- fread('https://open-covid-19.github.io/data/data.csv')
 data[, `:=`(
     Date=as.Date(Date),
     icon_group=cut(
-        data$Confirmed, 
-        breaks=c(-1, 10, 100, 1000, 10000, 1000000), 
+        data$Confirmed,
+        breaks=c(-1, 10, 100, 1000, 10000, 1000000),
         labels=c('1-10', '11-100', '101-1000', '1001-10000', '10000-')),
     label=paste0(
-        CountryName, 
+        CountryName,
         ' <br> ', RegionName,
         ' <br> #Confirmed: ', Confirmed,
         ' <br> #Deaths: ', Deaths
@@ -89,7 +90,7 @@ data <- data[Confirmed!=0 & DataLevel=='country' & Date=='2020-03-15']
 ```
 
 Dashboard {data-icon="ion-stats-bars"}
-=====================================  
+=====================================
 
 Column {data-width=350}
 -----------------------------------------------------------------------
