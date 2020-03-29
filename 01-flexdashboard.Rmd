@@ -6,7 +6,7 @@ output:
     # "default", "cerulean", "journal", "flatly", "darkly", "readable", "spacelab", "united", "cosmo", "lumen", "paper", "sandstone", "simplex", "yeti"
     theme: united
     source_code: embed
-    orientation: row
+    orientation: rows
     self_contained: FALSE
     logo: ./favicon.ico
     favicon: ./favicon.ico
@@ -18,14 +18,7 @@ runtime: shiny
 ```{r global, include=FALSE, warning=FALSE}
 library(flexdashboard)
 library(data.table)
-library(mapview)
 library(leaflet)
-library(dplyr)
-library(ggplot2)
-library(RCurl)
-library(lubridate)
-library(shiny)
-library(jsonlite)
 
 # library(bootstraplib)
 # bs_theme_new()
@@ -80,7 +73,7 @@ datasource = 'jhu'
 if (datasource == 'datahub') {
     # https://datahub.io/core/covid-19, it's eventually CSSE data...
     json_file <- 'https://datahub.io/core/covid-19/datapackage.json'
-    json_data <- fromJSON(paste(readLines(json_file), collapse=""))
+    json_data <- jsonlite::fromJSON(paste(readLines(json_file), collapse=""))
     
     for(i in 1:length(json_data$resources$datahub$type)){
         if(json_data$resources$datahub$type[i]=='derived/csv'){
@@ -109,9 +102,9 @@ if (datasource == 'datahub') {
                         "master/csse_covid_19_data/",
                         "csse_covid_19_time_series/"
     )
-    confirmed_data <- fread(getURL(paste0(site_link, "time_series_covid19_confirmed_global.csv")))
-    recovered_data <- fread(getURL(paste0(site_link, "time_series_covid19_recovered_global.csv")))
-    death_data <- fread(getURL(paste0(site_link, "time_series_covid19_deaths_global.csv")))
+    confirmed_data <- fread(RCurl::getURL(paste0(site_link, "time_series_covid19_confirmed_global.csv")))
+    recovered_data <- fread(RCurl::getURL(paste0(site_link, "time_series_covid19_recovered_global.csv")))
+    death_data <- fread(RCurl::getURL(paste0(site_link, "time_series_covid19_deaths_global.csv")))
     
     # remove columns with NA's
     confirmed_data <- confirmed_data[
@@ -155,7 +148,7 @@ if (datasource == 'datahub') {
     
     data <- rbindlist(list(confirmed, recovered, death), fill = TRUE)
     data[is.na(Num), Num:=0]
-    data[, Date:=mdy(Date)]
+    data[, Date:=lubridate::mdy(Date)]
     
     # data[`Country/Region`=='Taiwan*', `Province/State`:='Taiwan']
     # data[`Country/Region` %in% c('Mainland China', 'Taiwan*'), `Country/Region`:='China']
@@ -184,7 +177,7 @@ country_data <- data[, .(
     Deaths = sum(Deaths)
 ), .(CountryName, Date)]
 
-country_names <- c('World', unique((country_data %>% arrange(desc(Confirmed)) %>% select(CountryName))$CountryName))
+country_names <- c('World', unique(country_data[order(-Confirmed)][, CountryName]))
 
 data[, `:=`(
     Date=as.Date(Date),
@@ -241,7 +234,7 @@ radioButtons(
   selected = "all"
 )
 
-hr()
+strong(hr())
 ```
 
 ```{r, results='asis'}
@@ -254,7 +247,7 @@ hr()
 
 ```{r}
 # Create a subset data frame
-subdata <- reactive({
+sub_data <- reactive({
   if (input$country == 'World' & input$severity == 'all') {
     data[Date==input$date]
   } else if (input$country == 'World' & input$severity != 'all') {
@@ -265,6 +258,25 @@ subdata <- reactive({
     data[Date==input$date & CountryName==input$country & icon_group==input$severity]
   }
 })
+
+# # Time series data
+# ts_data <- reactive({
+#   if (input$country == 'World' & input$severity == 'all') {
+#     selected_data <- data
+#   } else if (input$country == 'World' & input$severity != 'all') {
+#     selected_data <- data[icon_group==input$severity]
+#   } else if (input$country != 'World' & input$severity == 'all') {
+#     selected_data <- data[CountryName==input$country]
+#   } else {
+#     selected_data <- data[CountryName==input$country & icon_group==input$severity]
+#   }
+#   
+#   selected_data[, .(
+#     Confirmed=sum(Confirmed), 
+#     Deaths=sum(Deaths),
+#     DeathRate=sum(Deaths) / sum(Confirmed)
+#   ), Date]
+# })
 ```
 
 Row
@@ -276,7 +288,7 @@ Row
 ```{r}
 renderValueBox({
   valueBox(
-    sum(subdata()$Confirmed),
+    sum(sub_data()$Confirmed),
     icon = "fa-vial",
     color = 'warning'
   )
@@ -289,7 +301,7 @@ renderValueBox({
 ```{r}
 renderValueBox({
   valueBox(
-    sum(subdata()$Deaths),
+    sum(sub_data()$Deaths),
     icon = "fa-bed",
     color = 'danger'
   )
@@ -301,7 +313,7 @@ renderValueBox({
 ```{r}
 renderValueBox({
   valueBox(
-    paste0(sprintf("%.2f", sum(subdata()$Deaths) / sum(subdata()$Confirmed)*100), "%"),
+    paste0(sprintf("%.2f", sum(sub_data()$Deaths) / sum(sub_data()$Confirmed)*100), "%"),
     icon = "fa-sort-amount-up",
     color = 'info'
   )
@@ -339,11 +351,16 @@ Row
 
 ```{r}
 DT::renderDataTable({
-  subdata()[, .(Country=CountryName, Region=RegionName, Confirmed, Deaths, DeathRate)] %>%
-    arrange(desc(Confirmed)) %>%
+  sub_data()[, .(
+      Country=CountryName, 
+      Region=RegionName, 
+      Confirmed, 
+      Deaths, 
+      DeathRate
+      )][order(-Confirmed)] %>%
     DT::datatable(
         rownames = FALSE,
-        options = list(pageLength=10)
+        options = list(pageLength=20)
     ) %>%
     DT::formatPercentage(c('DeathRate'), 2)
 })
@@ -377,7 +394,7 @@ update_leaflet <-  function(map_name, input) {
   # } else {
   #   leaflet_data <- data[Date==input$date]
   # }
-  leaflet_data <- subdata()
+  leaflet_data <- sub_data()
   
   if (input$country == 'World') {
     leaflet_country <- list(
