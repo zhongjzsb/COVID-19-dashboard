@@ -22,6 +22,7 @@ library(ggplot2)
 library(RCurl)
 library(lubridate)
 library(shiny)
+library(jsonlite)
 
 # library(bootstraplib)
 # bs_theme_new()
@@ -82,8 +83,22 @@ popup_icons <- awesomeIconList(
 datasource = 'jhu'
 if (datasource == 'datahub') {
     # https://datahub.io/core/covid-19, it's eventually CSSE data...
-    data <- fread("https://pkgstore.datahub.io/core/covid-19/time-series-19-covid-combined_csv/data/0e19819c40014068ad1a1de38e3e6573/time-series-19-covid-combined_csv.csv")
+    json_file <- 'https://datahub.io/core/covid-19/datapackage.json'
+    json_data <- fromJSON(paste(readLines(json_file), collapse=""))
+    
+    # print all tabular data(if exists any)
+    for(i in 1:length(json_data$resources$datahub$type)){
+        if(json_data$resources$datahub$type[i]=='derived/csv'){
+            if (json_data$resources$name[i] == 'time-series-19-covid-combined_csv') {
+                path_to_file = json_data$resources$path[i]
+                data <- fread(path_to_file)
+                break
+            }
+        }
+    }
     data[, Date:=as.Date(Date)]
+    data[is.na(Recovered), Recovered:=0]
+    data <- data[`Province/State` != 'Recovered']
     setnames(data, 
              c('Country/Region', 'Province/State', 'Lat', 'Long'), 
              c('CountryName', 'RegionName', 'Latitude', 'Longitude'))
