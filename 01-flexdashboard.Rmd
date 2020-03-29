@@ -360,7 +360,7 @@ DT::renderDataTable({
       )][order(-Confirmed)] %>%
     DT::datatable(
         rownames = FALSE,
-        options = list(pageLength=20)
+        options = list(pageLength=15)
     ) %>%
     DT::formatPercentage(c('DeathRate'), 2)
 })
