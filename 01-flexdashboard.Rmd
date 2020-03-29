@@ -165,10 +165,14 @@ if (datasource == 'datahub') {
     # data[`Country/Region` %in% c('Mainland China', 'Taiwan*'), `Country/Region`:='China']
     # data[`Province/State` %in% c('Hong Kong', 'Macau'), `Country/Region`:='China']
     
-    # calculate current case: confirmed - death - recovered
     data <- dcast(data, ...~Type, value.var = 'Num')
-    data <- data[`Province/State`!='Recovered' & !is.na(Confirmed) & !is.na(Deaths)]
+    data <- data[
+      !(`Province/State` %in% c('Recovered', 'Diamond Princess')) &
+        !is.na(Confirmed) & !is.na(Deaths)
+    ]
     data[is.na(Recovered), Recovered:=0]
+    
+    # calculate current case: confirmed - death - recovered
     data[, `:=`(
         Current=Confirmed - Deaths - Recovered
     )]
@@ -229,6 +233,9 @@ selectInput(
   selected = 'World'
 )
 ```
+
+markerLegendHTML(popup_icons)
+
 
 ### Data Source
 
