@@ -79,7 +79,7 @@ popup_icons <- awesomeIconList(
 
 ```{r}
 # data <- readRDS(here::here('covid-19-data.RDS'))
-datasource = 'datahub'
+datasource = 'jhu'
 if (datasource == 'datahub') {
     # https://datahub.io/core/covid-19, it's eventually CSSE data...
     data <- fread("https://pkgstore.datahub.io/core/covid-19/time-series-19-covid-combined_csv/data/0e19819c40014068ad1a1de38e3e6573/time-series-19-covid-combined_csv.csv")
@@ -143,7 +143,6 @@ if (datasource == 'datahub') {
     
     data <- rbindlist(list(confirmed, recovered, death), fill = TRUE)
     data[is.na(Num), Num:=0]
-    data <- data[`Province/State`!='Recovered']
     data[, Date:=mdy(Date)]
     
     # data[`Country/Region`=='Taiwan*', `Province/State`:='Taiwan']
@@ -151,19 +150,11 @@ if (datasource == 'datahub') {
     # data[`Province/State` %in% c('Hong Kong', 'Macau'), `Country/Region`:='China']
     
     # calculate current case: confirmed - death - recovered
-    current_data <- dcast(data, ...~Type, value.var = 'Num')
-    current_data[, `:=`(
-        Current=Confirmed - Deaths - Recovered,
-        Confirmed=NULL,
-        Deaths=NULL,
-        Recovered=NULL,
-        Type='current'
-    )]
-    setnames(current_data, 'Current', 'Num')
-    
-    data <- rbindlist(list(data, current_data), fill = TRUE)
+    data <- data[`Province/State`!='Recovered' & !is.na(Current)]
     data <- dcast(data, ...~Type, value.var = 'Num')
-    
+    data[, `:=`(
+        Current=Confirmed - Deaths - Recovered
+    )]
     setnames(data, 
              c('Country/Region', 'Province/State', 'Lat', 'Long'), 
              c('CountryName', 'RegionName', 'Latitude', 'Longitude'))
