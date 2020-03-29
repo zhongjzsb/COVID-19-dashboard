@@ -91,4 +91,4 @@ if (datasource == 'datahub') {
              c('CountryName', 'RegionName', 'Latitude', 'Longitude'))
 }
 
-saveRDS(data, here::here('covid-19-data.RDS'))
+# saveRDS(data, here::here('covid-19-data.RDS'))
