@@ -3,11 +3,13 @@ title: "COVID-19 Dashboard"
 author: "Jingyu Bao"
 output:
   flexdashboard::flex_dashboard:
-    theme: darkly
+    # "default", "cerulean", "journal", "flatly", "darkly", "readable", "spacelab", "united", "cosmo", "lumen", "paper", "sandstone", "simplex", "yeti"
+    theme: united
     source_code: embed
     orientation: row
     self_contained: FALSE
     logo: ./favicon.ico
+    social: menu
     # bootstrap_version: 4
 runtime: shiny
 ---
@@ -78,7 +80,7 @@ popup_icons <- awesomeIconList(
 ```
 
 
-```{r}
+```{r global}
 # data <- readRDS(here::here('covid-19-data.RDS'))
 datasource = 'jhu'
 if (datasource == 'datahub') {
@@ -86,7 +88,6 @@ if (datasource == 'datahub') {
     json_file <- 'https://datahub.io/core/covid-19/datapackage.json'
     json_data <- fromJSON(paste(readLines(json_file), collapse=""))
     
-    # print all tabular data(if exists any)
     for(i in 1:length(json_data$resources$datahub$type)){
         if(json_data$resources$datahub$type[i]=='derived/csv'){
             if (json_data$resources$name[i] == 'time-series-19-covid-combined_csv') {
@@ -165,14 +166,16 @@ if (datasource == 'datahub') {
     # data[`Province/State` %in% c('Hong Kong', 'Macau'), `Country/Region`:='China']
     
     # calculate current case: confirmed - death - recovered
-    data <- data[`Province/State`!='Recovered' & !is.na(Current)]
     data <- dcast(data, ...~Type, value.var = 'Num')
+    data <- data[`Province/State`!='Recovered' & !is.na(Confirmed) & !is.na(Deaths)]
+    data[is.na(Recovered), Recovered:=0]
     data[, `:=`(
         Current=Confirmed - Deaths - Recovered
     )]
     setnames(data, 
              c('Country/Region', 'Province/State', 'Lat', 'Long'), 
              c('CountryName', 'RegionName', 'Latitude', 'Longitude'))
+    # colSums(is.na(data))
 }
 
 country_data <- data[, .(
@@ -184,8 +187,7 @@ country_names <- c('World', unique((country_data %>% arrange(desc(Confirmed)) %>
 ```
 
 
-
-```{r load-data}
+```{r}
 data[, `:=`(
     Date=as.Date(Date),
     icon_group=cut(
@@ -227,6 +229,10 @@ selectInput(
   selected = 'World'
 )
 ```
+
+### Data Source
+
+[JHU Github](https://github.com/CSSEGISandData/COVID-19)
 
 Row
 --------------------------
