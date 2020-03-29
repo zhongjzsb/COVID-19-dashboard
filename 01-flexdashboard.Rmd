@@ -9,12 +9,13 @@ output:
     orientation: row
     self_contained: FALSE
     logo: ./favicon.ico
+    favicon: ./favicon.ico
     social: menu
     # bootstrap_version: 4
 runtime: shiny
 ---
 
-```{r setup, include=FALSE, warning=FALSE}
+```{r global, include=FALSE, warning=FALSE}
 library(flexdashboard)
 library(data.table)
 library(mapview)
@@ -33,11 +34,7 @@ library(jsonlite)
 # bs_theme_accent_colors(primary = "#e39777", secondary = "#fdce93")
 # shinyOptions(plot.autotheme = TRUE)
 # bs_theme_preview()
-```
 
-
-
-```{r html-plot-supplement, include=FALSE}
 # Ref: https://stackoverflow.com/questions/47064921/leaflet-legend-for-addawesomemarkers-function-with-icons
 markerLegendHTML <- function(IconSet) {
     # container div:
@@ -77,10 +74,7 @@ popup_icons <- awesomeIconList(
     '1001-10000' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'black'),
     '10000-' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'black', iconColor = 'darkred')
 )
-```
 
-
-```{r global}
 # data <- readRDS(here::here('covid-19-data.RDS'))
 datasource = 'jhu'
 if (datasource == 'datahub') {
@@ -100,6 +94,7 @@ if (datasource == 'datahub') {
     data[, Date:=as.Date(Date)]
     data[is.na(Recovered), Recovered:=0]
     data <- data[`Province/State` != 'Recovered']
+    data[, DeathRate:=Deaths / Confirmed]
     setnames(data, 
              c('Country/Region', 'Province/State', 'Lat', 'Long'), 
              c('CountryName', 'RegionName', 'Latitude', 'Longitude'))
@@ -107,6 +102,7 @@ if (datasource == 'datahub') {
     data <- fread('https://open-covid-19.github.io/data/data.csv')
     # select regional data
     data <- data[RegionName!='', ]
+    data[, DeathRate:=Deaths / Confirmed]
 } else if (datasource == 'jhu') {
     site_link <- paste0("https://raw.githubusercontent.com/",
                         "CSSEGISandData/COVID-19/",
@@ -174,7 +170,8 @@ if (datasource == 'datahub') {
     
     # calculate current case: confirmed - death - recovered
     data[, `:=`(
-        Current=Confirmed - Deaths - Recovered
+        Current=Confirmed - Deaths - Recovered,
+        DeathRate=Deaths / Confirmed
     )]
     setnames(data, 
              c('Country/Region', 'Province/State', 'Lat', 'Long'), 
@@ -188,10 +185,7 @@ country_data <- data[, .(
 ), .(CountryName, Date)]
 
 country_names <- c('World', unique((country_data %>% arrange(desc(Confirmed)) %>% select(CountryName))$CountryName))
-```
 
-
-```{r}
 data[, `:=`(
     Date=as.Date(Date),
     icon_group=cut(
@@ -218,7 +212,7 @@ Sidebar {.sidebar data-width=250}
 ```{r filters}
 sliderInput(
   inputId = 'date',
-  label = 'Date',
+  label = h3('Date'),
   min = min(data$Date),
   max = max(data$Date),
   value = max(data$Date),
@@ -228,18 +222,50 @@ sliderInput(
 
 selectInput(
   inputId = 'country',
-  label = 'Country',
+  label = h3('Country'),
   choices = country_names,
   selected = 'World'
 )
+
+radioButtons(
+  inputId = "severity", 
+  label = h3("Severity (Confirmed)"),
+  choices = list(
+    'all' = 'all',
+    "1-10" = "1-10", 
+    "11-100" = "11-100",
+    "101-1000" = "101-1000",
+    "1001-10000" = "1001-10000",
+    "10000-" = "10000-"
+  ), 
+  selected = "all"
+)
+
+hr()
 ```
 
-markerLegendHTML(popup_icons)
-
+```{r, results='asis'}
+# markerLegendHTML(popup_icons)
+```
 
 ### Data Source
 
 [JHU Github](https://github.com/CSSEGISandData/COVID-19)
+
+```{r}
+# Create a subset data frame
+subdata <- reactive({
+  if (input$country == 'World' & input$severity == 'all') {
+    data[Date==input$date]
+  } else if (input$country == 'World' & input$severity != 'all') {
+    data[Date==input$date & icon_group==input$severity]
+  } else if (input$country != 'World' & input$severity == 'all') {
+    data[Date==input$date & CountryName==input$country]
+  } else {
+    data[Date==input$date & CountryName==input$country & icon_group==input$severity]
+  }
+})
+```
 
 Row
 --------------------------
@@ -249,36 +275,21 @@ Row
 
 ```{r}
 renderValueBox({
-  if (input$country == 'World') {
-    subdata <- data %>%
-      filter(Date==input$date)
-  } else {
-    subdata <- data %>%
-      filter(Date==input$date & CountryName==input$country)
-  }
-  
   valueBox(
-    sum(subdata$Confirmed),
+    sum(subdata()$Confirmed),
     icon = "fa-vial",
     color = 'warning'
   )
 })
 ```
 
+
 ### Number of Deaths
 
 ```{r}
 renderValueBox({
-  if (input$country == 'World') {
-    subdata <- data %>%
-      filter(Date==input$date)
-  } else {
-    subdata <- data %>%
-      filter(Date==input$date & CountryName==input$country)
-  }
-  
   valueBox(
-    sum(subdata$Deaths),
+    sum(subdata()$Deaths),
     icon = "fa-bed",
     color = 'danger'
   )
@@ -289,16 +300,8 @@ renderValueBox({
 
 ```{r}
 renderValueBox({
-  if (input$country == 'World') {
-    subdata <- data %>%
-      filter(Date==input$date)
-  } else {
-    subdata <- data %>%
-      filter(Date==input$date & CountryName==input$country)
-  }
-  
   valueBox(
-    paste0(sprintf("%.2f", sum(subdata$Deaths) / sum(subdata$Confirmed)*100), "%"),
+    paste0(sprintf("%.2f", sum(subdata()$Deaths) / sum(subdata()$Confirmed)*100), "%"),
     icon = "fa-sort-amount-up",
     color = 'info'
   )
@@ -336,29 +339,13 @@ Row
 
 ```{r}
 DT::renderDataTable({
-  if (input$country == 'World') {
-    country_data %>%
-      filter(Date==input$date) %>%
-      mutate(DeathRate=Deaths/Confirmed) %>%
-      select(Country=CountryName, Confirmed, Deaths, DeathRate) %>%
-      arrange(desc(Confirmed)) %>%
-      DT::datatable(
-          rownames = FALSE,
-          options = list(pageLength=10)
-      ) %>%
-      DT::formatPercentage(c('DeathRate'), 2)
-  } else {
-    data %>%
-      filter(Date==input$date & CountryName==input$country) %>%
-      mutate(DeathRate=Deaths/Confirmed) %>%
-      select(Country=CountryName, Region=RegionName, Confirmed, Deaths, DeathRate) %>%
-      arrange(desc(Confirmed)) %>%
-      DT::datatable(
-          rownames = FALSE,
-          options = list(pageLength=10)
-      ) %>%
-      DT::formatPercentage(c('DeathRate'), 2)
-  }
+  subdata()[, .(Country=CountryName, Region=RegionName, Confirmed, Deaths, DeathRate)] %>%
+    arrange(desc(Confirmed)) %>%
+    DT::datatable(
+        rownames = FALSE,
+        options = list(pageLength=10)
+    ) %>%
+    DT::formatPercentage(c('DeathRate'), 2)
 })
 ```
 
@@ -384,42 +371,48 @@ output$leaflet_map <- renderLeaflet({
 })
 
 update_leaflet <-  function(map_name, input) {
-  leaflet_data <-
-    data %>%
-      filter(Date==input$date)
+
+  # if (input$severity != 'all') {
+  #   leaflet_data <- data[Date==input$date & icon_group==input$severity]
+  # } else {
+  #   leaflet_data <- data[Date==input$date]
+  # }
+  leaflet_data <- subdata()
   
   if (input$country == 'World') {
-    leafletProxy(map_name, data = leaflet_data)  %>%
-      clearGroup(group = 'covid-19') %>%
-      addAwesomeMarkers(
-        ~Longitude,
-        ~Latitude,
-        group = "covid-19",
-        label = ~lapply(label, htmltools::HTML),
-        icon = ~popup_icons[icon_group]
-      ) %>%
-      setView(lng = 0, lat = 0, zoom = 2)
+    leaflet_country <- list(
+      Longitude = 0,
+      Latitude = 0,
+      zoomLevel = 2
+    )
   } else {
-    leaflet_country <- data %>%
-      filter(CountryName==input$country)
-  
-    leafletProxy(map_name, data = leaflet_data)  %>%
-      clearGroup(group = 'covid-19') %>%
-      addAwesomeMarkers(
-        ~Longitude,
-        ~Latitude,
-        group = "covid-19",
-        label = ~lapply(label, htmltools::HTML),
-        icon = ~popup_icons[icon_group]
-      ) %>%
-      setView(lng = mean(leaflet_country$Longitude), lat = mean(leaflet_country$Latitude), zoom = 5)
+    leaflet_country <- data[
+      CountryName==input$country,
+      .(Longitude, Latitude, zoomLevel=5)
+    ]
   }
+  
+  leafletProxy(map_name, data = leaflet_data)  %>%
+    clearGroup(group = 'covid-19') %>%
+    addAwesomeMarkers(
+      ~Longitude,
+      ~Latitude,
+      group = "covid-19",
+      label = ~lapply(label, htmltools::HTML),
+      icon = ~popup_icons[icon_group]
+    ) %>%
+    setView(
+      lng = mean(leaflet_country$Longitude), 
+      lat = mean(leaflet_country$Latitude), 
+      zoom = mean(leaflet_country$zoomLevel)
+    )
 
 }
 
 observeEvent({
   input$date 
   input$country
+  input$severity
 }, update_leaflet('leaflet_map', input))
 ```
 
