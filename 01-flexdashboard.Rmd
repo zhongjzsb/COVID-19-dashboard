@@ -30,167 +30,180 @@ library(leaflet)
 
 # Ref: https://stackoverflow.com/questions/47064921/leaflet-legend-for-addawesomemarkers-function-with-icons
 markerLegendHTML <- function(IconSet) {
-    # container div:
-    legendHtml <- "<div style='padding: 10px; padding-bottom: 10px;'><h4 style='padding-top:0; padding-bottom:10px; margin: 0;'> Confirmed </h4>"
+  # container div:
+  legendHtml <- "<div style='padding: 10px; padding-bottom: 10px;'><h4 style='padding-top:0; padding-bottom:10px; margin: 0;'> Confirmed </h4>"
 
-    n <- 1
-    # add each icon for font-awesome icons icons:
-    for (Icon in IconSet) {
-        if (Icon[["library"]] == "glyphicon") {
-            legendHtml<- paste0(
-                legendHtml,
-                "<div style='width: auto; height: 45px'>",
-                "<div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-",
-                Icon[["markerColor"]],
-                "'>",
-                "<i style='margin-left: 4px; margin-top: 11px; color: ",
-                Icon[["iconColor"]],
-                "' class= 'glyphicon glyphicon-",
-                Icon[["icon"]],
-                "'></i>",
-                "</div>",
-                "<p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >",
-                names(IconSet)[n] ,
-                "</p>",
-                "</div>")
-        }
-        n<- n + 1
+  n <- 1
+  # add each icon for font-awesome icons icons:
+  for (Icon in IconSet) {
+    if (Icon[["library"]] == "glyphicon") {
+      legendHtml <- paste0(
+        legendHtml,
+        "<div style='width: auto; height: 45px'>",
+        "<div style='position: relative; display: inline-block; width: 36px; height: 45px' class='awesome-marker awesome-marker-icon-",
+        Icon[["markerColor"]],
+        "'>",
+        "<i style='margin-left: 4px; margin-top: 11px; color: ",
+        Icon[["iconColor"]],
+        "' class= 'glyphicon glyphicon-",
+        Icon[["icon"]],
+        "'></i>",
+        "</div>",
+        "<p style='position: relative; top: 10px; left: 2px; display: inline-block; ' >",
+        names(IconSet)[n],
+        "</p>",
+        "</div>"
+      )
     }
-    paste0(legendHtml, "</div>")
+    n <- n + 1
+  }
+  paste0(legendHtml, "</div>")
 }
 
 popup_icons <- awesomeIconList(
-    '0' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'green'),
-    '1-10' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'lightblue'),
-    '11-100' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'orange'),
-    '101-1000' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'red'),
-    '1001-10000' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'black'),
-    '10000-' = makeAwesomeIcon(icon='stats', library='glyphicon', markerColor = 'black', iconColor = 'darkred')
+  "0" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "green"),
+  "1-10" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "lightblue"),
+  "11-100" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "orange"),
+  "101-1000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "red"),
+  "1001-10000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black"),
+  "10000-" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black", iconColor = "darkred")
 )
 
 # data <- readRDS(here::here('covid-19-data.RDS'))
-datasource = 'jhu'
-if (datasource == 'datahub') {
-    # https://datahub.io/core/covid-19, it's eventually CSSE data...
-    json_file <- 'https://datahub.io/core/covid-19/datapackage.json'
-    json_data <- jsonlite::fromJSON(paste(readLines(json_file), collapse=""))
-    
-    for(i in 1:length(json_data$resources$datahub$type)){
-        if(json_data$resources$datahub$type[i]=='derived/csv'){
-            if (json_data$resources$name[i] == 'time-series-19-covid-combined_csv') {
-                path_to_file = json_data$resources$path[i]
-                data <- fread(path_to_file)
-                break
-            }
-        }
+datasource <- "jhu"
+if (datasource == "datahub") {
+  # https://datahub.io/core/covid-19, it's eventually CSSE data...
+  json_file <- "https://datahub.io/core/covid-19/datapackage.json"
+  json_data <- jsonlite::fromJSON(paste(readLines(json_file), collapse = ""))
+
+  for (i in 1:length(json_data$resources$datahub$type)) {
+    if (json_data$resources$datahub$type[i] == "derived/csv") {
+      if (json_data$resources$name[i] == "time-series-19-covid-combined_csv") {
+        path_to_file <- json_data$resources$path[i]
+        data <- fread(path_to_file)
+        break
+      }
     }
-    data[, Date:=as.Date(Date)]
-    data[is.na(Recovered), Recovered:=0]
-    data <- data[`Province/State` != 'Recovered']
-    data[, DeathRate:=Deaths / Confirmed]
-    setnames(data, 
-             c('Country/Region', 'Province/State', 'Lat', 'Long'), 
-             c('CountryName', 'RegionName', 'Latitude', 'Longitude'))
-} else if (datasource == 'open-covid-19'){
-    data <- fread('https://open-covid-19.github.io/data/data.csv')
-    # select regional data
-    data <- data[RegionName!='', ]
-    data[, DeathRate:=Deaths / Confirmed]
-} else if (datasource == 'jhu') {
-    site_link <- paste0("https://raw.githubusercontent.com/",
-                        "CSSEGISandData/COVID-19/",
-                        "master/csse_covid_19_data/",
-                        "csse_covid_19_time_series/"
-    )
-    confirmed_data <- fread(RCurl::getURL(paste0(site_link, "time_series_covid19_confirmed_global.csv")))
-    recovered_data <- fread(RCurl::getURL(paste0(site_link, "time_series_covid19_recovered_global.csv")))
-    death_data <- fread(RCurl::getURL(paste0(site_link, "time_series_covid19_deaths_global.csv")))
-    
-    # remove columns with NA's
-    confirmed_data <- confirmed_data[
-        , colSums(!is.na(confirmed_data)) == nrow(confirmed_data), with=FALSE]
-    recovered_data <- recovered_data[
-        , colSums(!is.na(confirmed_data)) == nrow(confirmed_data), with=FALSE]
-    death_data <- death_data[
-        , colSums(!is.na(confirmed_data)) == nrow(confirmed_data), with=FALSE]
-    
-    cols <- names(recovered_data)[5:dim(recovered_data)[2]]
-    recovered_data[, (cols) := lapply(.SD, as.integer), .SDcols = cols]
-    
-    confirmed <- melt(
-        confirmed_data,
-        id=1:4,
-        measure=colnames(confirmed_data)[5:dim(confirmed_data)[2]],
-        value.factor=TRUE,
-        variable.name = "Date",
-        value.name = "Num"
-    )
-    recovered <- melt(
-        recovered_data,
-        id=1:4,
-        measure=colnames(recovered_data)[5:dim(recovered_data)[2]],
-        value.factor=TRUE,
-        variable.name = "Date",
-        value.name = "Num"
-    )
-    death <- melt(
-        death_data,
-        id=1:4,
-        measure=colnames(death_data)[5:dim(death_data)[2]],
-        value.factor=TRUE,
-        variable.name = "Date",
-        value.name = "Num"
-    )
-    
-    confirmed[, Type:='Confirmed']
-    recovered[, Type:='Recovered']
-    death[, Type:='Deaths']
-    
-    data <- rbindlist(list(confirmed, recovered, death), fill = TRUE)
-    data[is.na(Num), Num:=0]
-    data[, Date:=lubridate::mdy(Date)]
-    
-    # data[`Country/Region`=='Taiwan*', `Province/State`:='Taiwan']
-    # data[`Country/Region` %in% c('Mainland China', 'Taiwan*'), `Country/Region`:='China']
-    # data[`Province/State` %in% c('Hong Kong', 'Macau'), `Country/Region`:='China']
-    
-    data <- dcast(data, ...~Type, value.var = 'Num')
-    data <- data[
-      !(`Province/State` %in% c('Recovered', 'Diamond Princess')) &
-        !is.na(Confirmed) & !is.na(Deaths)
-    ]
-    data[is.na(Recovered), Recovered:=0]
-    
-    # calculate current case: confirmed - death - recovered
-    data[, `:=`(
-        Current=Confirmed - Deaths - Recovered,
-        DeathRate=Deaths / Confirmed
-    )]
-    setnames(data, 
-             c('Country/Region', 'Province/State', 'Lat', 'Long'), 
-             c('CountryName', 'RegionName', 'Latitude', 'Longitude'))
-    # colSums(is.na(data))
+  }
+  data[, Date := as.Date(Date)]
+  data[is.na(Recovered), Recovered := 0]
+  data <- data[`Province/State` != "Recovered"]
+  data[, DeathRate := Deaths / Confirmed]
+  setnames(
+    data,
+    c("Country/Region", "Province/State", "Lat", "Long"),
+    c("CountryName", "RegionName", "Latitude", "Longitude")
+  )
+} else if (datasource == "open-covid-19") {
+  data <- fread("https://open-covid-19.github.io/data/data.csv")
+  # select regional data
+  data <- data[RegionName != "", ]
+  data[, DeathRate := Deaths / Confirmed]
+} else if (datasource == "jhu") {
+  site_link <- paste0(
+    "https://raw.githubusercontent.com/",
+    "CSSEGISandData/COVID-19/",
+    "master/csse_covid_19_data/",
+    "csse_covid_19_time_series/"
+  )
+  confirmed_data <- fread(RCurl::getURL(paste0(site_link, "time_series_covid19_confirmed_global.csv")))
+  recovered_data <- fread(RCurl::getURL(paste0(site_link, "time_series_covid19_recovered_global.csv")))
+  death_data <- fread(RCurl::getURL(paste0(site_link, "time_series_covid19_deaths_global.csv")))
+
+  # remove columns with NA's
+  confirmed_data <- confirmed_data[
+    , colSums(!is.na(confirmed_data)) == nrow(confirmed_data),
+    with = FALSE
+  ]
+  recovered_data <- recovered_data[
+    , colSums(!is.na(confirmed_data)) == nrow(confirmed_data),
+    with = FALSE
+  ]
+  death_data <- death_data[
+    , colSums(!is.na(confirmed_data)) == nrow(confirmed_data),
+    with = FALSE
+  ]
+
+  cols <- names(recovered_data)[5:dim(recovered_data)[2]]
+  recovered_data[, (cols) := lapply(.SD, as.integer), .SDcols = cols]
+
+  confirmed <- melt(
+    confirmed_data,
+    id = 1:4,
+    measure = colnames(confirmed_data)[5:dim(confirmed_data)[2]],
+    value.factor = TRUE,
+    variable.name = "Date",
+    value.name = "Num"
+  )
+  recovered <- melt(
+    recovered_data,
+    id = 1:4,
+    measure = colnames(recovered_data)[5:dim(recovered_data)[2]],
+    value.factor = TRUE,
+    variable.name = "Date",
+    value.name = "Num"
+  )
+  death <- melt(
+    death_data,
+    id = 1:4,
+    measure = colnames(death_data)[5:dim(death_data)[2]],
+    value.factor = TRUE,
+    variable.name = "Date",
+    value.name = "Num"
+  )
+
+  confirmed[, Type := "Confirmed"]
+  recovered[, Type := "Recovered"]
+  death[, Type := "Deaths"]
+
+  data <- rbindlist(list(confirmed, recovered, death), fill = TRUE)
+  data[is.na(Num), Num := 0]
+  data[, Date := lubridate::mdy(Date)]
+
+  # data[`Country/Region`=='Taiwan*', `Province/State`:='Taiwan']
+  # data[`Country/Region` %in% c('Mainland China', 'Taiwan*'), `Country/Region`:='China']
+  # data[`Province/State` %in% c('Hong Kong', 'Macau'), `Country/Region`:='China']
+
+  data <- dcast(data, ... ~ Type, value.var = "Num")
+  data <- data[
+    !(`Province/State` %in% c("Recovered", "Diamond Princess")) &
+      !is.na(Confirmed) & !is.na(Deaths)
+  ]
+  data[is.na(Recovered), Recovered := 0]
+
+  # calculate current case: confirmed - death - recovered
+  data[, `:=`(
+    Current = Confirmed - Deaths - Recovered,
+    DeathRate = Deaths / Confirmed
+  )]
+  setnames(
+    data,
+    c("Country/Region", "Province/State", "Lat", "Long"),
+    c("CountryName", "RegionName", "Latitude", "Longitude")
+  )
+  # colSums(is.na(data))
 }
 
 country_data <- data[, .(
-    Confirmed = sum(Confirmed),
-    Deaths = sum(Deaths)
+  Confirmed = sum(Confirmed),
+  Deaths = sum(Deaths)
 ), .(CountryName, Date)]
 
-country_names <- c('World', unique(country_data[order(-Confirmed)][, CountryName]))
+country_names <- c("World", unique(country_data[order(-Confirmed)][, CountryName]))
 
 data[, `:=`(
-    Date=as.Date(Date),
-    icon_group=cut(
-        data$Confirmed,
-        breaks=c(-1, 0, 10, 100, 1000, 10000, 1000000),
-        labels=c('0', '1-10', '11-100', '101-1000', '1001-10000', '10000-')),
-    label=paste0(
-        CountryName,
-        ' <br> ', RegionName,
-        ' <br> #Confirmed: ', Confirmed,
-        ' <br> #Deaths: ', Deaths
-    )
+  Date = as.Date(Date),
+  icon_group = cut(
+    data$Confirmed,
+    breaks = c(-1, 0, 10, 100, 1000, 10000, 1000000),
+    labels = c("0", "1-10", "11-100", "101-1000", "1001-10000", "10000-")
+  ),
+  label = paste0(
+    CountryName,
+    " <br> ", RegionName,
+    " <br> #Confirmed: ", Confirmed,
+    " <br> #Deaths: ", Deaths
+  )
 )]
 ```
 
@@ -204,33 +217,33 @@ Sidebar {.sidebar data-width=250}
 
 ```{r filters}
 sliderInput(
-  inputId = 'date',
-  label = h3('Date'),
+  inputId = "date",
+  label = h3("Date"),
   min = min(data$Date),
   max = max(data$Date),
   value = max(data$Date),
-  width = '200px',
+  width = "200px",
   animate = TRUE
 )
 
 selectInput(
-  inputId = 'country',
-  label = h3('Country'),
+  inputId = "country",
+  label = h3("Country"),
   choices = country_names,
-  selected = 'World'
+  selected = "World"
 )
 
 radioButtons(
-  inputId = "severity", 
+  inputId = "severity",
   label = h3("Severity (Confirmed)"),
   choices = list(
-    'all' = 'all',
-    "1-10" = "1-10", 
+    "all" = "all",
+    "1-10" = "1-10",
     "11-100" = "11-100",
     "101-1000" = "101-1000",
     "1001-10000" = "1001-10000",
     "10000-" = "10000-"
-  ), 
+  ),
   selected = "all"
 )
 
@@ -248,14 +261,14 @@ strong(hr())
 ```{r}
 # Create a subset data frame
 sub_data <- reactive({
-  if (input$country == 'World' & input$severity == 'all') {
-    data[Date==input$date]
-  } else if (input$country == 'World' & input$severity != 'all') {
-    data[Date==input$date & icon_group==input$severity]
-  } else if (input$country != 'World' & input$severity == 'all') {
-    data[Date==input$date & CountryName==input$country]
+  if (input$country == "World" & input$severity == "all") {
+    data[Date == input$date]
+  } else if (input$country == "World" & input$severity != "all") {
+    data[Date == input$date & icon_group == input$severity]
+  } else if (input$country != "World" & input$severity == "all") {
+    data[Date == input$date & CountryName == input$country]
   } else {
-    data[Date==input$date & CountryName==input$country & icon_group==input$severity]
+    data[Date == input$date & CountryName == input$country & icon_group == input$severity]
   }
 })
 
@@ -270,9 +283,9 @@ sub_data <- reactive({
 #   } else {
 #     selected_data <- data[CountryName==input$country & icon_group==input$severity]
 #   }
-#   
+#
 #   selected_data[, .(
-#     Confirmed=sum(Confirmed), 
+#     Confirmed=sum(Confirmed),
 #     Deaths=sum(Deaths),
 #     DeathRate=sum(Deaths) / sum(Confirmed)
 #   ), Date]
@@ -290,7 +303,7 @@ renderValueBox({
   valueBox(
     sum(sub_data()$Confirmed),
     icon = "fa-vial",
-    color = 'warning'
+    color = "warning"
   )
 })
 ```
@@ -303,7 +316,7 @@ renderValueBox({
   valueBox(
     sum(sub_data()$Deaths),
     icon = "fa-bed",
-    color = 'danger'
+    color = "danger"
   )
 })
 ```
@@ -313,9 +326,9 @@ renderValueBox({
 ```{r}
 renderValueBox({
   valueBox(
-    paste0(sprintf("%.2f", sum(sub_data()$Deaths) / sum(sub_data()$Confirmed)*100), "%"),
+    paste0(sprintf("%.2f", sum(sub_data()$Deaths) / sum(sub_data()$Confirmed) * 100), "%"),
     icon = "fa-sort-amount-up",
-    color = 'info'
+    color = "info"
   )
 })
 ```
@@ -327,7 +340,7 @@ renderValueBox({
   valueBox(
     input$country,
     icon = "fa-globe-americas",
-    color = 'primary'
+    color = "primary"
   )
 })
 ```
@@ -339,7 +352,7 @@ renderValueBox({
   valueBox(
     input$date,
     icon = "fa-calendar",
-    color = 'primary'
+    color = "primary"
   )
 })
 ```
@@ -352,42 +365,42 @@ Row
 ```{r}
 DT::renderDataTable({
   sub_data()[, .(
-      Country=CountryName, 
-      Region=RegionName, 
-      Confirmed, 
-      Deaths, 
-      DeathRate
-      )][order(-Confirmed)] %>%
+    Country = CountryName,
+    Region = RegionName,
+    Confirmed,
+    Deaths,
+    DeathRate
+  )][order(-Confirmed)] %>%
     DT::datatable(
-        rownames = FALSE,
-        options = list(pageLength=15)
+      rownames = FALSE,
+      options = list(pageLength = 20)
     ) %>%
-    DT::formatPercentage(c('DeathRate'), 2)
+    DT::formatPercentage(c("DeathRate"), 2)
 })
 ```
 
 ### 
 
 ```{r}
-leafletOutput('leaflet_map')
+leafletOutput("leaflet_map")
 
 output$leaflet_map <- renderLeaflet({
-    leaflet(options = leafletOptions(minZoom = 2, maxZoom = 8)) %>%
+  leaflet(options = leafletOptions(minZoom = 2, maxZoom = 8)) %>%
     # addMarkers(layerId = 'awesomemarker', lng = 0, lat = 0) %>%
     addTiles(
-        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>',
-        options = providerTileOptions(noWrap = TRUE)
+      urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+      attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>',
+      options = providerTileOptions(noWrap = TRUE)
     ) %>%
     # addPopupGraphs(popup_plots, group = 'covid-19', width = 300, height = 300) %>%
     leaflet.extras::addFullscreenControl(position = "topleft") %>%
     addControl(html = markerLegendHTML(popup_icons), position = "bottomright") %>%
-    leafem::addHomeButton(raster::extent(c(-130, 130, -50, 50)), 'Home', position = 'topleft') %>%
+    leafem::addHomeButton(raster::extent(c(-130, 130, -50, 50)), "Home", position = "topleft") %>%
     setMaxBounds(lng1 = -200, lat1 = -90, lng2 = 200, lat2 = 90) %>%
     setView(lng = 0, lat = 0, zoom = 2)
 })
 
-update_leaflet <-  function(map_name, input) {
+update_leaflet <- function(map_name, input) {
 
   # if (input$severity != 'all') {
   #   leaflet_data <- data[Date==input$date & icon_group==input$severity]
@@ -395,8 +408,8 @@ update_leaflet <-  function(map_name, input) {
   #   leaflet_data <- data[Date==input$date]
   # }
   leaflet_data <- sub_data()
-  
-  if (input$country == 'World') {
+
+  if (input$country == "World") {
     leaflet_country <- list(
       Longitude = 0,
       Latitude = 0,
@@ -404,34 +417,33 @@ update_leaflet <-  function(map_name, input) {
     )
   } else {
     leaflet_country <- data[
-      CountryName==input$country,
-      .(Longitude, Latitude, zoomLevel=5)
+      CountryName == input$country,
+      .(Longitude, Latitude, zoomLevel = 5)
     ]
   }
-  
-  leafletProxy(map_name, data = leaflet_data)  %>%
-    clearGroup(group = 'covid-19') %>%
+
+  leafletProxy(map_name, data = leaflet_data) %>%
+    clearGroup(group = "covid-19") %>%
     addAwesomeMarkers(
       ~Longitude,
       ~Latitude,
       group = "covid-19",
-      label = ~lapply(label, htmltools::HTML),
-      icon = ~popup_icons[icon_group]
+      label = ~ lapply(label, htmltools::HTML),
+      icon = ~ popup_icons[icon_group]
     ) %>%
     setView(
-      lng = mean(leaflet_country$Longitude), 
-      lat = mean(leaflet_country$Latitude), 
+      lng = mean(leaflet_country$Longitude),
+      lat = mean(leaflet_country$Latitude),
       zoom = mean(leaflet_country$zoomLevel)
     )
-
 }
 
-observeEvent({
-  input$date 
-  input$country
-  input$severity
-}, update_leaflet('leaflet_map', input))
+observeEvent(
+  {
+    input$date
+    input$country
+    input$severity
+  },
+  update_leaflet("leaflet_map", input)
+)
 ```
-
-
-
