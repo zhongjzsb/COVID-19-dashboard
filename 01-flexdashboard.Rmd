@@ -245,6 +245,10 @@ strong(hr())
 
 [JHU Github](https://github.com/CSSEGISandData/COVID-19)
 
+### Code Source
+
+[zhongjzsb Github](https://github.com/zhongjzsb/COVID-19-dashboard)
+
 ```{r}
 # Create a subset data frame
 sub_data <- reactive({
@@ -314,7 +318,7 @@ renderValueBox({
 renderValueBox({
   valueBox(
     paste0(sprintf("%.2f", sum(sub_data()$Deaths) / sum(sub_data()$Confirmed)*100), "%"),
-    icon = "fa-sort-amount-up",
+    icon = "fa-chart-bar",
     color = 'info'
   )
 })
