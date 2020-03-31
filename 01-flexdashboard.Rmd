@@ -330,15 +330,9 @@ renderValueBox({
 ```{r}
 renderValueBox({
   valueBox(
-<<<<<<< HEAD
     paste0(sprintf("%.2f", sum(sub_data()$Deaths) / sum(sub_data()$Confirmed)*100), "%"),
     icon = "fa-chart-bar",
     color = 'info'
-=======
-    paste0(sprintf("%.2f", sum(sub_data()$Deaths) / sum(sub_data()$Confirmed) * 100), "%"),
-    icon = "fa-sort-amount-up",
-    color = "info"
->>>>>>> defce7946a6fffd43bec551bd0f5b4b6a41d647f
   )
 })
 ```
