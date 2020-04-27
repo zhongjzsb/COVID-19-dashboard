@@ -168,7 +168,7 @@ if (datasource == "datahub") {
   data <- dcast(data, ... ~ Type, value.var = "Num")
   data <- data[
     !(`Province/State` %in% c("Recovered", "Diamond Princess", "Grand Princess")) &
-      !is.na(Confirmed) & !is.na(Deaths)
+      !is.na(Confirmed) & !is.na(Deaths) & (Confirmed >= 0) & (Deaths >= 0)
   ]
   data[is.na(Recovered), Recovered := 0]
 
