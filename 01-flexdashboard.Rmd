@@ -175,7 +175,7 @@ if (datasource == "datahub") {
   # calculate current case: confirmed - death - recovered
   data[, `:=`(
     Current = Confirmed - Deaths - Recovered,
-    DeathRate = Deaths / Confirmed
+    DeathRate = Deaths / ifelse(Confirmed==0, 1, Confirmed)
   )]
   setnames(
     data,
