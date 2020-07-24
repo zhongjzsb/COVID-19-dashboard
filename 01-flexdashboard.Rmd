@@ -63,11 +63,11 @@ markerLegendHTML <- function(IconSet) {
 
 popup_icons <- awesomeIconList(
   "0" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "green"),
-  "1-10" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "lightblue"),
-  "11-100" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "orange"),
-  "101-1000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "red"),
-  "1001-10000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black"),
-  "10000-" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black", iconColor = "darkred")
+  "1-100" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "lightblue"),
+  "101-1000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "orange"),
+  "1001-10000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "red"),
+  "10001-100000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black"),
+  "100000-" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black", iconColor = "darkred")
 )
 
 # data <- readRDS(here::here('covid-19-data.RDS'))
@@ -196,8 +196,8 @@ data[, `:=`(
   Date = as.Date(Date),
   icon_group = cut(
     data$Confirmed,
-    breaks = c(-1, 0, 10, 100, 1000, 10000, 100000000),
-    labels = c("0", "1-10", "11-100", "101-1000", "1001-10000", "10000-")
+    breaks = c(-1, 0, 100, 1000, 10000, 100000, 100000000),
+    labels = c("0", "1-100", "101-1000", "1001-10000", "10001-100000", "100000-")
   ),
   label = paste0(
     CountryName,
