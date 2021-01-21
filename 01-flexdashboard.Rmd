@@ -153,12 +153,18 @@ if (datasource == "datahub") {
     value.name = "Num"
   )
 
-  confirmed = merge(confirmed, recovered[, .(`Province/State`, `Country/Region`, Date, Lat, Long)])
+  confirmed = merge(
+    confirmed, 
+    recovered[, .(`Province/State`, `Country/Region`, Date, Lat, Long)],
+    by = c('Province/State', 'Country/Region', 'Date'),
+    all.x = TRUE
+  )
   confirmed[, Type := "Confirmed"]
   recovered[, Type := "Recovered"]
   death[, Type := "Deaths"]
 
   data <- rbindlist(list(confirmed, recovered, death), fill = TRUE)
+  data <- data[!is.na(data$Lat)]
   data[is.na(Num), Num := 0]
   data[, Date := lubridate::mdy(Date)]
 
@@ -197,7 +203,7 @@ data[, `:=`(
   Date = as.Date(Date),
   icon_group = cut(
     data$Confirmed,
-    breaks = c(-1, 0, 100, 10000, 100000, 1000000, 100000000),
+    breaks = c(-1, 0, 100, 10000, 100000, 1000000, 1000000000),
     labels = c("0", "1-100", "101-10000", "10001-100000", "100001-1000000", "1000000-")
   ),
   label = paste0(
@@ -394,7 +400,8 @@ output$leaflet_map <- renderLeaflet({
   leaflet(options = leafletOptions(minZoom = 2, maxZoom = 8)) %>%
     # addMarkers(layerId = 'awesomemarker', lng = 0, lat = 0) %>%
     addTiles(
-      urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+      # urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+      urlTemplate = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>',
       options = providerTileOptions(noWrap = TRUE)
     ) %>%
