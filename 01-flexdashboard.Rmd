@@ -64,10 +64,10 @@ markerLegendHTML <- function(IconSet) {
 popup_icons <- awesomeIconList(
   "0" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "green"),
   "1-100" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "lightblue"),
-  "101-1000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "orange"),
-  "1001-10000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "red"),
-  "10001-100000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black"),
-  "100000-" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black", iconColor = "darkred")
+  "101-10000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "orange"),
+  "10001-100000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "red"),
+  "100001-1000000" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black"),
+  "1000000-" = makeAwesomeIcon(icon = "stats", library = "glyphicon", markerColor = "black", iconColor = "darkred")
 )
 
 # data <- readRDS(here::here('covid-19-data.RDS'))
@@ -130,8 +130,8 @@ if (datasource == "datahub") {
 
   confirmed <- melt(
     confirmed_data,
-    id = 1:4,
-    measure = colnames(confirmed_data)[5:dim(confirmed_data)[2]],
+    id = 1:2,
+    measure = colnames(confirmed_data)[3:dim(confirmed_data)[2]],
     value.factor = TRUE,
     variable.name = "Date",
     value.name = "Num"
@@ -153,6 +153,7 @@ if (datasource == "datahub") {
     value.name = "Num"
   )
 
+  confirmed = merge(confirmed, recovered[, .(`Province/State`, `Country/Region`, Date, Lat, Long)])
   confirmed[, Type := "Confirmed"]
   recovered[, Type := "Recovered"]
   death[, Type := "Deaths"]
@@ -196,8 +197,8 @@ data[, `:=`(
   Date = as.Date(Date),
   icon_group = cut(
     data$Confirmed,
-    breaks = c(-1, 0, 100, 1000, 10000, 100000, 100000000),
-    labels = c("0", "1-100", "101-1000", "1001-10000", "10001-100000", "100000-")
+    breaks = c(-1, 0, 100, 10000, 100000, 1000000, 100000000),
+    labels = c("0", "1-100", "101-10000", "10001-100000", "100001-1000000", "1000000-")
   ),
   label = paste0(
     CountryName,
